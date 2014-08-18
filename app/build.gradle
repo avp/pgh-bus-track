@@ -1,0 +1,37 @@
+apply plugin: 'com.android.application'
+
+android {
+    buildToolsVersion "20.0.0"
+    compileSdkVersion 20
+
+    defaultConfig {
+        applicationId "com.avp42.pghbustrack"
+        minSdkVersion 15
+        targetSdkVersion 20
+        versionCode 0
+        versionName "0.0.0"
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // You must install or update the Support Repository through the SDK manager to use this dependency.
+    compile group: 'com.android.support', name: 'support-v4', version: '21.+'
+
+    compile group: 'com.google.guava', name: 'guava', version: '12.0'
+
+    compile group: 'com.google.code.gson', name: 'gson', version: '1.7.2'
+
+    compile group: 'joda-time', name: 'joda-time', version: '1.6.1'
+}
