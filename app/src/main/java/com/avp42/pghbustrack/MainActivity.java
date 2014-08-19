@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import com.avp42.pghbustrack.data.PaacApi;
 
 
 public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -18,24 +19,24 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
   /**
    * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
    */
-  private NavigationDrawerFragment mNavigationDrawerFragment;
+  private NavigationDrawerFragment navigationDrawerFragment;
 
   /**
    * Used to store the last screen title. For use in {@link #restoreActionBar()}.
    */
-  private CharSequence mTitle;
+  private CharSequence lastScreenTitle;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    mNavigationDrawerFragment =
+    navigationDrawerFragment =
         (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
-    mTitle = getTitle();
+    lastScreenTitle = getTitle();
 
     // Set up the drawer.
-    mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+    navigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
   }
 
   @Override
@@ -48,28 +49,29 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
   public void onSectionAttached(int number) {
     switch (number) {
       case 1:
-        mTitle = getString(R.string.title_section1);
+        lastScreenTitle = getString(R.string.title_section1);
         break;
       case 2:
-        mTitle = getString(R.string.title_section2);
+        lastScreenTitle = getString(R.string.title_section2);
         break;
       case 3:
-        mTitle = getString(R.string.title_section3);
+        lastScreenTitle = getString(R.string.title_section3);
         break;
     }
   }
 
   public void restoreActionBar() {
     ActionBar actionBar = getActionBar();
-    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-    actionBar.setDisplayShowTitleEnabled(true);
-    actionBar.setTitle(mTitle);
+    if (actionBar != null) {
+      actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+      actionBar.setDisplayShowTitleEnabled(true);
+      actionBar.setTitle(lastScreenTitle);
+    }
   }
-
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    if (!mNavigationDrawerFragment.isDrawerOpen()) {
+    if (!navigationDrawerFragment.isDrawerOpen()) {
       // Only show items in the action bar relevant to this screen
       // if the drawer is not showing. Otherwise, let the drawer
       // decide what to show in the action bar.
@@ -116,14 +118,14 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-      View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-      return rootView;
+      return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
     @Override
     public void onAttach(Activity activity) {
       super.onAttach(activity);
       ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
+      PaacApi.getInstance().getVehicles();
     }
   }
 

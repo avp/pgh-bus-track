@@ -1,14 +1,13 @@
 package com.avp42.pghbustrack.models.vehicle;
 
 import com.google.gson.annotations.SerializedName;
-import org.joda.time.DateTime;
 
 public class Vehicle {
   @SerializedName("vid")
   private String id;
 
-  @SerializedName("tmstmp")
-  private DateTime timestamp;
+//  @SerializedName("tmstmp")
+//  private DateTime timestamp;
 
   @SerializedName("lat")
   private String latitude;
@@ -33,4 +32,8 @@ public class Vehicle {
 
   @SerializedName("des")
   private String destination;
+
+  public String toString() {
+    return destination;
+  }
 }
