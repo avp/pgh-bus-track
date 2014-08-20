@@ -1,7 +1,6 @@
 package com.avp42.pghbustrack.data;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.util.Log;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.models.vehicle.Vehicle;
@@ -9,7 +8,6 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.IOUtils;
@@ -19,8 +17,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -46,89 +42,66 @@ public class PaacApi {
     return INSTANCE;
   }
 
-  public void getVehicles() {
+  public List<Vehicle> getVehicles() {
     Log.d(LOG_TAG, "Executing Vehicle Request");
     Map<String, String> params = Maps.newHashMap();
     params.put("rt", "48");
-    ExecuteRequestCallback callback = new ExecuteRequestCallback() {
-      @Override
-      public List<Vehicle> callback(String json) {
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-        JsonArray jsonArray = jsonObject.get("bustime-response").getAsJsonObject().get("vehicle").getAsJsonArray();
-        List<Vehicle> vehicles = gson.fromJson(jsonArray, vehicleListType);
-        Log.d(LOG_TAG, vehicles.toString());
-        return vehicles;
-      }
-    };
-    ExecuteRequestParams executeRequestParams = new ExecuteRequestParams("/getvehicles", params, callback);
-    new ExecuteRequestTask().execute(executeRequestParams);
+    String json = executeRequest("/getvehicles", params);
+    JsonArray jsonArray = new JsonParser().parse(json)
+        .getAsJsonObject()
+        .get("bustime-response")
+        .getAsJsonObject()
+        .get("vehicle")
+        .getAsJsonArray();
+    List<Vehicle> vehicles = gson.fromJson(jsonArray, vehicleListType);
+    return vehicles;
   }
 
-  private static class ExecuteRequestParams {
-    private String url;
-    private Map<String, String> params;
-    private ExecuteRequestCallback callback;
-
-    private ExecuteRequestParams(String url, Map<String, String> params, ExecuteRequestCallback callback) {
-      this.url = url;
-      this.params = params;
-      this.callback = callback;
-    }
+  public List<Route> getRoutes() {
+    Log.d(LOG_TAG, "Executing Routes Request");
+    Map<String, String> params = Maps.newHashMap();
+    String json = executeRequest("/getroutes", params);
+    JsonArray jsonArray = new JsonParser().parse(json)
+        .getAsJsonObject()
+        .get("bustime-response")
+        .getAsJsonObject()
+        .get("routes")
+        .getAsJsonArray();
+    List<Route> routes = gson.fromJson(jsonArray, routeListType);
+    return routes;
   }
 
-  private abstract class ExecuteRequestCallback {
-    public abstract Object callback(String json);
-  }
+  protected String executeRequest(String url, Map<String, String> params) {
+    Uri.Builder uri = Uri.parse(BASE_URL + url).buildUpon();
 
-  private static class ExecuteRequestTask extends AsyncTask<ExecuteRequestParams, Void, String> {
-    private ExecuteRequestCallback callback;
-
-    protected String doInBackground(ExecuteRequestParams... executeRequestParams) {
-      if (executeRequestParams.length < 1) {
-        return null;
-      }
-
-      String url = executeRequestParams[0].url;
-      Map<String, String> params = executeRequestParams[0].params;
-      this.callback = executeRequestParams[0].callback;
-
-      Uri.Builder uri = Uri.parse(BASE_URL + url).buildUpon();
-
-      HttpParams httpParams = new BasicHttpParams();
-      for (Map.Entry<String, String> entry : params.entrySet()) {
-        uri.appendQueryParameter(entry.getKey(), entry.getValue());
-      }
-
-      String uriString = uri.appendQueryParameter("key", API_KEY)
-          .appendQueryParameter("format", "json")
-          .appendQueryParameter("localestring", "en_US").build().toString();
-
-      Log.d(LOG_TAG, uriString);
-
-      try {
-        HttpGet httpGet = new HttpGet(uriString);
-        HttpResponse response = httpClient.execute(httpGet);
-        Log.i(LOG_TAG, response.getStatusLine().toString());
-        HttpEntity entity = response.getEntity();
-        if (entity != null) {
-          InputStream inputStream = entity.getContent();
-          String result = IOUtils.toString(inputStream);
-          inputStream.close();
-          return result;
-        }
-        return null;
-      } catch (ClientProtocolException e) {
-        return null;
-      } catch (IOException e) {
-        return null;
-      }
+    for (Map.Entry<String, String> entry : params.entrySet()) {
+      uri.appendQueryParameter(entry.getKey(), entry.getValue());
     }
 
-    @Override
-    protected void onPostExecute(String json) {
-      super.onPostExecute(json);
-      callback.callback(json);
+    String uriString = uri.appendQueryParameter("key", API_KEY)
+        .appendQueryParameter("format", "json")
+        .appendQueryParameter("localestring", "en_US")
+        .build()
+        .toString();
+
+    Log.d(LOG_TAG, uriString);
+
+    try {
+      HttpGet httpGet = new HttpGet(uriString);
+      HttpResponse response = httpClient.execute(httpGet);
+      Log.i(LOG_TAG, response.getStatusLine().toString());
+      HttpEntity entity = response.getEntity();
+      if (entity != null) {
+        InputStream inputStream = entity.getContent();
+        String result = IOUtils.toString(inputStream);
+        inputStream.close();
+        return result;
+      }
+      return null;
+    } catch (ClientProtocolException e) {
+      return null;
+    } catch (IOException e) {
+      return null;
     }
   }
 }

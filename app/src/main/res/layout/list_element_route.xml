@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/route_list_layout"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:paddingLeft="8dp"
+  android:paddingRight="8dp">
+
+  <TextView
+    android:id="@+id/tv_route_name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:padding="10dp" />
+
+  <View
+    android:layout_width="fill_parent"
+    android:layout_height="0.2dp"
+    android:visibility="visible"
+    android:background="@android:color/darker_gray" />
+</LinearLayout>

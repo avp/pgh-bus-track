@@ -11,4 +11,12 @@ public class Route {
 
   @SerializedName("rtclr")
   private String color;
+
+  public String getName() {
+    return name;
+  }
+
+  public String toString() {
+    return this.name;
+  }
 }
