@@ -177,6 +177,7 @@ public class NavigationDrawerFragment extends Fragment {
 
   public void setDrawerIndicatorEnabled(boolean enabled) {
     mDrawerToggle.setDrawerIndicatorEnabled(enabled);
+    mDrawerToggle.syncState();
   }
 
   private void selectItem(int position) {

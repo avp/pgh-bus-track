@@ -40,13 +40,10 @@ public class RouteListFragment extends ListFragment {
   }
 
   @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
-    ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
-
+  public void onResume() {
+    super.onResume();
     ActionBar actionBar = getActivity().getActionBar();
     if (actionBar != null) {
-      actionBar.setDisplayHomeAsUpEnabled(false);
       ((MainActivity) getActivity()).getNavigationDrawerFragment().setDrawerIndicatorEnabled(true);
     }
 
@@ -64,13 +61,19 @@ public class RouteListFragment extends ListFragment {
   }
 
   @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
+  }
+
+  @Override
   public void onListItemClick(ListView listView, View view, int position, long id) {
     super.onListItemClick(listView, view, position, id);
     Route route = (Route) listView.getAdapter().getItem(position);
     FragmentManager fragmentManager = getActivity().getFragmentManager();
     fragmentManager.beginTransaction()
         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-        .hide(this)
+        .remove(this)
         .add(R.id.container, RouteDisplayFragment.newInstance(route))
         .addToBackStack(null)
         .commit();

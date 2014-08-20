@@ -6,6 +6,12 @@ import java.io.Serializable;
 public class Route implements Serializable {
   private static final long serialVersionUID = 6497937177310136759L;
 
+  public Route(String id, String name, String color) {
+    this.id = id;
+    this.name = name;
+    this.color = color;
+  }
+
   @SerializedName("rt")
   private String id;
 

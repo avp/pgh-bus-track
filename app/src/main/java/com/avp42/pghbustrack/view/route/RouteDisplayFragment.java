@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,7 +42,6 @@ public class RouteDisplayFragment extends Fragment {
 
     ActionBar actionBar = getActivity().getActionBar();
     if (actionBar != null) {
-      actionBar.setDisplayHomeAsUpEnabled(true);
       ((MainActivity) getActivity()).getNavigationDrawerFragment().setDrawerIndicatorEnabled(false);
       setHasOptionsMenu(true);
     }
@@ -77,7 +75,6 @@ public class RouteDisplayFragment extends Fragment {
       @Override
       protected void onPostExecute(List<Vehicle> vehicles) {
         super.onPostExecute(vehicles);
-        Log.d("DEBUG", vehicles.toString());
         VehicleArrayAdapter vehicleArrayAdapter = new VehicleArrayAdapter(getActivity(), vehicles);
         vehicleListView.setAdapter(vehicleArrayAdapter);
       }
