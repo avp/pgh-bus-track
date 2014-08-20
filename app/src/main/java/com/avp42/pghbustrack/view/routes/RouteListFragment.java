@@ -3,7 +3,6 @@ package com.avp42.pghbustrack.view.routes;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -71,9 +70,9 @@ public class RouteListFragment extends ListFragment {
     Route route = (Route) listView.getAdapter().getItem(position);
     FragmentManager fragmentManager = getActivity().getFragmentManager();
     fragmentManager.beginTransaction()
+        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
         .hide(this)
         .add(R.id.container, RouteDisplayFragment.newInstance(route))
-        .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK)
         .addToBackStack(null)
         .commit();
   }
