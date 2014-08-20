@@ -23,8 +23,6 @@ import java.util.List;
 public class RouteListFragment extends ListFragment {
   private static final String ARG_SECTION_NUMBER = "section_number";
 
-  private List<Route> routes;
-
   public static RouteListFragment newInstance(int sectionNumber) {
     RouteListFragment fragment = new RouteListFragment();
     Bundle args = new Bundle();
@@ -78,7 +76,7 @@ public class RouteListFragment extends ListFragment {
   }
 
   private void setRoutes(List<Route> routes) {
-    this.routes = routes;
+    List<Route> routes1 = routes;
     displayRoutes(routes);
   }
 
