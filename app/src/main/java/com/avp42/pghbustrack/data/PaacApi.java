@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.util.Log;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.models.vehicle.Vehicle;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +12,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -42,10 +44,18 @@ public class PaacApi {
     return INSTANCE;
   }
 
-  public List<Vehicle> getVehicles() {
+  public List<Vehicle> getVehicles(Route route) {
+    return getVehicles(Lists.newArrayList(route));
+  }
+
+  public List<Vehicle> getVehicles(List<Route> routes) {
     Log.d(LOG_TAG, "Executing Vehicle Request");
     Map<String, String> params = Maps.newHashMap();
-    params.put("rt", "48");
+    List<String> routeIds = Lists.newArrayList();
+    for (Route r : routes) {
+      routeIds.add(r.getId());
+    }
+    params.put("rt", StringUtils.join(routeIds, ","));
     String json = executeRequest("/getvehicles", params);
     JsonArray jsonArray = new JsonParser().parse(json)
         .getAsJsonObject()
@@ -84,7 +94,7 @@ public class PaacApi {
         .build()
         .toString();
 
-    Log.d(LOG_TAG, uriString);
+    Log.i(LOG_TAG, uriString);
 
     try {
       HttpGet httpGet = new HttpGet(uriString);

@@ -33,6 +33,14 @@ public class Vehicle {
   @SerializedName("des")
   private String destination;
 
+  public String getId() {
+    return id;
+  }
+
+  public String getDestination() {
+    return destination;
+  }
+
   public String toString() {
     return destination;
   }

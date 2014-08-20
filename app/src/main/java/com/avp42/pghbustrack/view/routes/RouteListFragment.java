@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class RouteListFragment extends ListFragment {
   public RouteListFragment() {}
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_routelist, container, false);
   }
 
@@ -76,11 +77,6 @@ public class RouteListFragment extends ListFragment {
   }
 
   private void setRoutes(List<Route> routes) {
-    List<Route> routes1 = routes;
-    displayRoutes(routes);
-  }
-
-  private void displayRoutes(List<Route> routes) {
     RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
     getListView().setAdapter(arrayAdapter);
   }

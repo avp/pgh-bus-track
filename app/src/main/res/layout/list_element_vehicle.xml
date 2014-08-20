@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/route_list_layout"
+  android:orientation="vertical"
+  android:background="@android:color/white"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content">
+
+  <TextView
+    android:id="@+id/tv_vehicle_id"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:paddingLeft="15dp"
+    android:paddingBottom="0dp"
+    android:textSize="24sp"
+    tools:text="28X"
+    android:paddingTop="10dp" />
+
+  <TextView
+    android:id="@+id/tv_vehicle_destination"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:paddingTop="5dp"
+    android:paddingLeft="15dp"
+    android:paddingBottom="10dp"
+    android:textSize="15sp"
+    tools:text="AIRPORT FLYER" />
+</LinearLayout>
