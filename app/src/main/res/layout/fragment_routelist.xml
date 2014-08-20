@@ -14,4 +14,15 @@
     android:background="@android:color/white"
     android:layout_weight="1"
     android:drawSelectorOnTop="false" />
+
+  <TextView
+    android:id="@+id/tv_no_routes_loaded"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:textSize="18sp"
+    android:textColor="@android:color/darker_gray"
+    android:gravity="center"
+    android:visibility="gone"
+    android:text="@string/no_route_info_available" />
+
 </LinearLayout>

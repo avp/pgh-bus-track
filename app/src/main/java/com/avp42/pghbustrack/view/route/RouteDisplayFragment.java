@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.data.PaacApi;
 import com.avp42.pghbustrack.models.route.Route;
@@ -19,6 +20,7 @@ import com.avp42.pghbustrack.models.vehicle.Vehicle;
 import com.avp42.pghbustrack.util.Util;
 import com.avp42.pghbustrack.view.MainActivity;
 import com.avp42.pghbustrack.view.routes.VehicleArrayAdapter;
+import java.io.IOException;
 import java.util.List;
 
 public class RouteDisplayFragment extends Fragment {
@@ -69,12 +71,20 @@ public class RouteDisplayFragment extends Fragment {
     new AsyncTask<Void, Void, List<Vehicle>>() {
       @Override
       protected List<Vehicle> doInBackground(Void... params) {
-        return PaacApi.getInstance().getVehicles(route);
+        try {
+          return PaacApi.getInstance().getVehicles(route);
+        } catch (IOException e) {
+          return null;
+        }
       }
 
       @Override
       protected void onPostExecute(List<Vehicle> vehicles) {
         super.onPostExecute(vehicles);
+        if (vehicles == null) {
+          Toast.makeText(getActivity(), "Unable to retrieve route information.", Toast.LENGTH_LONG).show();
+          return;
+        }
         VehicleArrayAdapter vehicleArrayAdapter = new VehicleArrayAdapter(getActivity(), vehicles);
         vehicleListView.setAdapter(vehicleArrayAdapter);
       }

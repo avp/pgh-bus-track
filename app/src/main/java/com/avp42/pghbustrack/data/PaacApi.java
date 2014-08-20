@@ -44,11 +44,11 @@ public class PaacApi {
     return INSTANCE;
   }
 
-  public List<Vehicle> getVehicles(Route route) {
+  public List<Vehicle> getVehicles(Route route) throws IOException {
     return getVehicles(Lists.newArrayList(route));
   }
 
-  public List<Vehicle> getVehicles(List<Route> routes) {
+  public List<Vehicle> getVehicles(List<Route> routes) throws IOException {
     Log.d(LOG_TAG, "Executing Vehicle Request");
     Map<String, String> params = Maps.newHashMap();
     List<String> routeIds = Lists.newArrayList();
@@ -67,7 +67,7 @@ public class PaacApi {
     return vehicles;
   }
 
-  public List<Route> getRoutes() {
+  public List<Route> getRoutes() throws IOException {
     Log.d(LOG_TAG, "Executing Routes Request");
     Map<String, String> params = Maps.newHashMap();
     String json = executeRequest("/getroutes", params);
@@ -81,7 +81,7 @@ public class PaacApi {
     return routes;
   }
 
-  protected String executeRequest(String url, Map<String, String> params) {
+  protected String executeRequest(String url, Map<String, String> params) throws IOException {
     Uri.Builder uri = Uri.parse(BASE_URL + url).buildUpon();
 
     for (Map.Entry<String, String> entry : params.entrySet()) {
@@ -107,11 +107,9 @@ public class PaacApi {
         inputStream.close();
         return result;
       }
-      return null;
+      return "";
     } catch (ClientProtocolException e) {
-      return null;
-    } catch (IOException e) {
-      return null;
+      return "";
     }
   }
 }

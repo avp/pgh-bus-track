@@ -11,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.data.PaacApi;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.view.MainActivity;
 import com.avp42.pghbustrack.view.route.RouteDisplayFragment;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,6 +25,8 @@ import java.util.List;
  */
 public class RouteListFragment extends ListFragment {
   private static final String ARG_SECTION_NUMBER = "section_number";
+
+  private TextView noRoutesLoadedTextView;
 
   public static RouteListFragment newInstance(int sectionNumber) {
     RouteListFragment fragment = new RouteListFragment();
@@ -36,7 +40,11 @@ public class RouteListFragment extends ListFragment {
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.fragment_routelist, container, false);
+    View view = inflater.inflate(R.layout.fragment_routelist, container, false);
+
+    noRoutesLoadedTextView = (TextView) view.findViewById(R.id.tv_no_routes_loaded);
+
+    return view;
   }
 
   @Override
@@ -50,7 +58,11 @@ public class RouteListFragment extends ListFragment {
     new AsyncTask<Void, Void, List<Route>>() {
       @Override
       protected List<Route> doInBackground(Void... params) {
-        return PaacApi.getInstance().getRoutes();
+        try {
+          return PaacApi.getInstance().getRoutes();
+        } catch (IOException e) {
+          return null;
+        }
       }
 
       @Override
@@ -80,7 +92,14 @@ public class RouteListFragment extends ListFragment {
   }
 
   private void setRoutes(List<Route> routes) {
-    RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
-    getListView().setAdapter(arrayAdapter);
+    if (routes == null) {
+      getListView().setVisibility(View.GONE);
+      noRoutesLoadedTextView.setVisibility(View.VISIBLE);
+    } else {
+      RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
+      getListView().setAdapter(arrayAdapter);
+      getListView().setVisibility(View.VISIBLE);
+      noRoutesLoadedTextView.setVisibility(View.GONE);
+    }
   }
 }
