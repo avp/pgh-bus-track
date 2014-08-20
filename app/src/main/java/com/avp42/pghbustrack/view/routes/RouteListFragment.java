@@ -1,16 +1,21 @@
 package com.avp42.pghbustrack.view.routes;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.data.PaacApi;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.view.MainActivity;
+import com.avp42.pghbustrack.view.route.RouteDisplayFragment;
 import java.util.List;
 
 /**
@@ -18,6 +23,8 @@ import java.util.List;
  */
 public class RouteListFragment extends ListFragment {
   private static final String ARG_SECTION_NUMBER = "section_number";
+
+  private List<Route> routes;
 
   public static RouteListFragment newInstance(int sectionNumber) {
     RouteListFragment fragment = new RouteListFragment();
@@ -27,8 +34,7 @@ public class RouteListFragment extends ListFragment {
     return fragment;
   }
 
-  public RouteListFragment() {
-  }
+  public RouteListFragment() {}
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,6 +45,12 @@ public class RouteListFragment extends ListFragment {
   public void onAttach(Activity activity) {
     super.onAttach(activity);
     ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
+
+    ActionBar actionBar = getActivity().getActionBar();
+    if (actionBar != null) {
+      actionBar.setDisplayHomeAsUpEnabled(false);
+      ((MainActivity) getActivity()).getNavigationDrawerFragment().setDrawerIndicatorEnabled(true);
+    }
 
     new AsyncTask<Void, Void, List<Route>>() {
       @Override
@@ -53,7 +65,25 @@ public class RouteListFragment extends ListFragment {
     }.execute();
   }
 
+  @Override
+  public void onListItemClick(ListView listView, View view, int position, long id) {
+    super.onListItemClick(listView, view, position, id);
+    Route route = (Route) listView.getAdapter().getItem(position);
+    FragmentManager fragmentManager = getActivity().getFragmentManager();
+    fragmentManager.beginTransaction()
+        .hide(this)
+        .add(R.id.container, RouteDisplayFragment.newInstance(route))
+        .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK)
+        .addToBackStack(null)
+        .commit();
+  }
+
   private void setRoutes(List<Route> routes) {
+    this.routes = routes;
+    displayRoutes(routes);
+  }
+
+  private void displayRoutes(List<Route> routes) {
     RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
     getListView().setAdapter(arrayAdapter);
   }

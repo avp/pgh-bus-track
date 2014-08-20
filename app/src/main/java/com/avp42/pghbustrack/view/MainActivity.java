@@ -6,7 +6,6 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
-import android.view.MenuItem;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.view.routes.RouteListFragment;
 
@@ -27,8 +26,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    navigationDrawerFragment =
-        (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
+    navigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
     lastScreenTitle = getTitle();
 
     // Set up the drawer.
@@ -78,13 +76,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     return super.onCreateOptionsMenu(menu);
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
-    return id == R.id.action_settings || super.onOptionsItemSelected(item);
+  public NavigationDrawerFragment getNavigationDrawerFragment() {
+    return navigationDrawerFragment;
   }
-
 }

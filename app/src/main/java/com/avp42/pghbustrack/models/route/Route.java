@@ -1,8 +1,11 @@
 package com.avp42.pghbustrack.models.route;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
-public class Route {
+public class Route implements Serializable {
+  private static final long serialVersionUID = 6497937177310136759L;
+
   @SerializedName("rt")
   private String id;
 
