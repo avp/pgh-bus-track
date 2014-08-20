@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Route {
   @SerializedName("rt")
-  private String route;
+  private String id;
 
   @SerializedName("rtnm")
   private String name;
@@ -12,8 +12,16 @@ public class Route {
   @SerializedName("rtclr")
   private String color;
 
+  public String getId() {
+    return id;
+  }
+
   public String getName() {
     return name;
+  }
+
+  public String getColor() {
+    return color;
   }
 
   public String toString() {
