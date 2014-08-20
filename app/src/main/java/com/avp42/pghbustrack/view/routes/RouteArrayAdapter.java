@@ -12,8 +12,10 @@ import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.util.Util;
 import java.util.List;
+import static com.avp42.pghbustrack.util.Constants.App.ROUTE_LIST_GRADIENT_FACTOR;
 
 public class RouteArrayAdapter extends ArrayAdapter<Route> {
+
   public RouteArrayAdapter(Context context, List<Route> routes) {
     super(context, R.layout.list_element_route, routes);
   }
@@ -29,7 +31,7 @@ public class RouteArrayAdapter extends ArrayAdapter<Route> {
     LinearLayout routeListLayout = (LinearLayout) convertView.findViewById(R.id.route_list_layout);
     int darkColor = route.getDarkColor();
     GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-        new int[]{darkColor, Util.darken(darkColor, 0.85)});
+        new int[]{darkColor, Util.darken(darkColor, ROUTE_LIST_GRADIENT_FACTOR)});
     routeListLayout.setBackgroundDrawable(gradientDrawable);
 
     TextView routeNameView = (TextView) convertView.findViewById(R.id.tv_route_name);

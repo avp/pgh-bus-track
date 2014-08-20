@@ -2,6 +2,7 @@ package com.avp42.pghbustrack.view.route;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,10 +17,12 @@ import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.data.PaacApi;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.models.vehicle.Vehicle;
+import com.avp42.pghbustrack.util.Util;
 import com.avp42.pghbustrack.view.MainActivity;
 import com.avp42.pghbustrack.view.routes.VehicleArrayAdapter;
 import java.io.IOException;
 import java.util.List;
+import static com.avp42.pghbustrack.util.Constants.App.ROUTE_LIST_GRADIENT_FACTOR;
 
 public class RouteDisplayFragment extends Fragment {
   private ListView vehicleListView;
@@ -47,7 +50,10 @@ public class RouteDisplayFragment extends Fragment {
     }
 
     LinearLayout layoutHeading = (LinearLayout) view.findViewById(R.id.route_display_heading);
-    layoutHeading.setBackgroundColor(route.getDarkColor());
+    int darkColor = route.getDarkColor();
+    GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+        new int[]{darkColor, Util.darken(darkColor, ROUTE_LIST_GRADIENT_FACTOR)});
+    layoutHeading.setBackgroundDrawable(gradientDrawable);
 
     TextView routeIdTextView = (TextView) view.findViewById(R.id.tv_route_id);
     routeIdTextView.setText(route.getId());
