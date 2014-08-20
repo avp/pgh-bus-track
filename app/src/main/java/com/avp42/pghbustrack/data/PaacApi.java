@@ -24,9 +24,9 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
-import static com.avp42.pghbustrack.Constants.Api.API_KEY;
-import static com.avp42.pghbustrack.Constants.Api.BASE_URL;
-import static com.avp42.pghbustrack.Constants.App.LOG_TAG;
+import static com.avp42.pghbustrack.util.Constants.Api.API_KEY;
+import static com.avp42.pghbustrack.util.Constants.Api.BASE_URL;
+import static com.avp42.pghbustrack.util.Constants.App.LOG_TAG;
 
 public class PaacApi {
   private static final HttpClient httpClient = new DefaultHttpClient();

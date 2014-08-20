@@ -6,29 +6,37 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <TextView
-    android:id="@+id/tv_route_id"
+  <LinearLayout
+    android:id="@+id/route_display_heading"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal"
-    android:gravity="center"
-    android:textSize="55sp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:layout_marginTop="20dp"
-    tools:text="28X" />
+    android:orientation="vertical">
 
-  <TextView
-    android:id="@+id/tv_route_name"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal"
-    android:gravity="center"
-    android:textSize="25sp"
-    android:paddingTop="0dp"
-    android:paddingBottom="10dp"
-    android:layout_marginBottom="20dp"
-    tools:text="AIRPORT FLYER" />
+    <TextView
+      android:id="@+id/tv_route_id"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:gravity="center"
+      android:textSize="55sp"
+      android:paddingTop="10dp"
+      android:paddingBottom="10dp"
+      android:layout_marginTop="20dp"
+      tools:text="28X" />
+
+    <TextView
+      android:id="@+id/tv_route_name"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:gravity="center"
+      android:textSize="25sp"
+      android:paddingTop="0dp"
+      android:paddingBottom="10dp"
+      android:layout_marginBottom="20dp"
+      tools:text="AIRPORT FLYER" />
+
+  </LinearLayout>
 
   <ListView
     android:id="@+id/lv_vehicles"

@@ -1,4 +1,4 @@
-package com.avp42.pghbustrack;
+package com.avp42.pghbustrack.util;
 
 public class Constants {
   public static class App {
