@@ -10,6 +10,7 @@
     android:id="@+id/route_display_heading"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:background="@android:color/holo_blue_dark"
     android:orientation="vertical">
 
     <TextView
@@ -19,6 +20,7 @@
       android:layout_gravity="center_horizontal"
       android:gravity="center"
       android:textSize="55sp"
+      android:textColor="@android:color/white"
       android:paddingTop="10dp"
       android:paddingBottom="10dp"
       android:layout_marginTop="20dp"
@@ -31,6 +33,7 @@
       android:layout_gravity="center_horizontal"
       android:gravity="center"
       android:textSize="25sp"
+      android:textColor="@android:color/white"
       android:paddingTop="0dp"
       android:paddingBottom="10dp"
       android:layout_marginBottom="20dp"

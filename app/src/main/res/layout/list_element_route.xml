@@ -3,29 +3,28 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/route_list_layout"
   android:orientation="vertical"
-  android:background="@android:color/holo_blue_bright"
+  android:background="@android:color/holo_blue_dark"
   android:layout_width="fill_parent"
-  android:layout_height="wrap_content">
+  android:layout_height="wrap_content"
+  android:paddingTop="15dp"
+  android:paddingLeft="20dp"
+  android:paddingBottom="20dp" >
 
   <TextView
     android:id="@+id/tv_route_id"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:paddingLeft="15dp"
-    android:paddingBottom="0dp"
-    android:textSize="24sp"
-    tools:text="28X"
-    android:paddingTop="10dp" />
+    android:textSize="45sp"
+    android:textColor="@android:color/white"
+    tools:text="28X"/>
 
   <TextView
     android:id="@+id/tv_route_name"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:paddingTop="5dp"
-    android:paddingLeft="15dp"
-    android:paddingBottom="10dp"
-    android:textSize="15sp"
+    android:textSize="24sp"
+    android:textColor="@android:color/white"
     tools:text="AIRPORT FLYER" />
 </LinearLayout>

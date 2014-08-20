@@ -9,8 +9,8 @@
     android:id="@id/android:list"
     android:layout_width="fill_parent"
     android:layout_height="0dp"
-    android:divider="@null"
-    android:dividerHeight="0dp"
+    android:divider="@android:color/black"
+    android:dividerHeight="0.2dp"
     android:background="@android:color/white"
     android:layout_weight="1"
     android:drawSelectorOnTop="false" />

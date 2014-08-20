@@ -17,6 +17,7 @@ import com.avp42.pghbustrack.data.PaacApi;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.view.MainActivity;
 import com.avp42.pghbustrack.view.route.RouteDisplayFragment;
+import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.util.List;
 
@@ -92,14 +93,9 @@ public class RouteListFragment extends ListFragment {
   }
 
   private void setRoutes(List<Route> routes) {
-    if (routes == null) {
-      getListView().setVisibility(View.GONE);
-      noRoutesLoadedTextView.setVisibility(View.VISIBLE);
-    } else {
-      RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
-      getListView().setAdapter(arrayAdapter);
-      getListView().setVisibility(View.VISIBLE);
-      noRoutesLoadedTextView.setVisibility(View.GONE);
-    }
+    ListView listView = getListView();
+    listView.setEmptyView(noRoutesLoadedTextView);
+    RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
+    listView.setAdapter(arrayAdapter);
   }
 }

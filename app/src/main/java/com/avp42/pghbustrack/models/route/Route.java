@@ -1,5 +1,7 @@
 package com.avp42.pghbustrack.models.route;
 
+import android.graphics.Color;
+import com.avp42.pghbustrack.util.Util;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
@@ -31,6 +33,14 @@ public class Route implements Serializable {
 
   public String getColor() {
     return color;
+  }
+
+  public int getDarkColor() {
+    int result = Color.parseColor(color);
+    while (!Util.isColorDark(result)) {
+      result = Util.darken(result, 0.9);
+    }
+    return result;
   }
 
   public String toString() {

@@ -2,7 +2,6 @@ package com.avp42.pghbustrack.view.route;
 
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.data.PaacApi;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.models.vehicle.Vehicle;
-import com.avp42.pghbustrack.util.Util;
 import com.avp42.pghbustrack.view.MainActivity;
 import com.avp42.pghbustrack.view.routes.VehicleArrayAdapter;
 import java.io.IOException;
@@ -48,19 +46,14 @@ public class RouteDisplayFragment extends Fragment {
       setHasOptionsMenu(true);
     }
 
-    int color = Color.parseColor(route.getColor());
-    int textColor = Util.isColorDark(color) ? Color.WHITE : Color.BLACK;
-
     LinearLayout layoutHeading = (LinearLayout) view.findViewById(R.id.route_display_heading);
-    layoutHeading.setBackgroundColor(color);
+    layoutHeading.setBackgroundColor(route.getDarkColor());
 
     TextView routeIdTextView = (TextView) view.findViewById(R.id.tv_route_id);
     routeIdTextView.setText(route.getId());
-    routeIdTextView.setTextColor(textColor);
 
     TextView routeNameTextView = (TextView) view.findViewById(R.id.tv_route_name);
     routeNameTextView.setText(route.getName());
-    routeNameTextView.setTextColor(textColor);
 
     vehicleListView = (ListView) view.findViewById(R.id.lv_vehicles);
 
