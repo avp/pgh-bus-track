@@ -17,6 +17,7 @@
     android:background="@android:color/transparent"
     android:textSize="45sp"
     android:textColor="@android:color/white"
+    android:textStyle="bold"
     tools:text="28X"/>
 
   <TextView

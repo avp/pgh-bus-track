@@ -21,9 +21,10 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"
       android:gravity="center"
-      android:textSize="58sp"
+      android:textSize="50sp"
+      android:textStyle="bold"
       android:textColor="@android:color/white"
-      android:layout_marginBottom="10dp"
+      android:layout_marginBottom="5dp"
       tools:text="28X" />
 
     <TextView
