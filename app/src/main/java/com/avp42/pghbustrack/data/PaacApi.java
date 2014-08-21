@@ -2,7 +2,9 @@ package com.avp42.pghbustrack.data;
 
 import android.net.Uri;
 import android.util.Log;
+import com.avp42.pghbustrack.models.direction.Direction;
 import com.avp42.pghbustrack.models.route.Route;
+import com.avp42.pghbustrack.models.stop.Stop;
 import com.avp42.pghbustrack.models.vehicle.Vehicle;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -35,6 +37,8 @@ public class PaacApi {
 
   private static final Type vehicleListType = new TypeToken<List<Vehicle>>() { }.getType();
   private static final Type routeListType = new TypeToken<List<Route>>() { }.getType();
+  private static final Type stopListType = new TypeToken<List<Stop>>() { }.getType();
+  private static final Type directionListType = new TypeToken<List<Direction>>() { }.getType();
 
   private static final PaacApi INSTANCE = new PaacApi();
 
@@ -79,6 +83,37 @@ public class PaacApi {
         .getAsJsonArray();
     List<Route> routes = gson.fromJson(jsonArray, routeListType);
     return routes;
+  }
+
+  public List<Direction> getDirections(Route route) throws IOException {
+    Log.d(LOG_TAG, "Executing Stops Request");
+    Map<String, String> params = Maps.newHashMap();
+    params.put("rt", route.getId());
+    String json = executeRequest("/getdirections", params);
+    JsonArray jsonArray = new JsonParser().parse(json)
+        .getAsJsonObject()
+        .get("bustime-response")
+        .getAsJsonObject()
+        .get("directions")
+        .getAsJsonArray();
+    List<Direction> directions = gson.fromJson(jsonArray, directionListType);
+    return directions;
+  }
+
+  public List<Stop> getStops(Route route, Direction direction) throws IOException {
+    Log.d(LOG_TAG, "Executing Stops Request");
+    Map<String, String> params = Maps.newHashMap();
+    params.put("rt", route.getId());
+    params.put("dir", direction.getDirection());
+    String json = executeRequest("/getstops", params);
+    JsonArray jsonArray = new JsonParser().parse(json)
+        .getAsJsonObject()
+        .get("bustime-response")
+        .getAsJsonObject()
+        .get("stops")
+        .getAsJsonArray();
+    List<Stop> stops = gson.fromJson(jsonArray, stopListType);
+    return stops;
   }
 
   protected String executeRequest(String url, Map<String, String> params) throws IOException {

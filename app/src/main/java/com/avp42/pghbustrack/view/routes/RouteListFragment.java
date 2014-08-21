@@ -62,7 +62,9 @@ public class RouteListFragment extends ListFragment {
         try {
           return PaacApi.getInstance().getRoutes();
         } catch (IOException e) {
-          return null;
+          Route route = new Route("28X", "AIRPORT", "#0099DD");
+          return Lists.newArrayList(route, route, route, route, route, route, route, route, route);
+
         }
       }
 
