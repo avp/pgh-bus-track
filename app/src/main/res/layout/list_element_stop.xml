@@ -13,8 +13,9 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:paddingLeft="15dp"
-    android:paddingBottom="0dp"
-    android:textSize="24sp"
-    tools:text="5322"
-    android:paddingTop="10dp" />
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    android:layout_gravity="center_vertical"
+    android:textSize="20sp"
+    tools:text="Forbes Ave at Morewood" />
 </LinearLayout>

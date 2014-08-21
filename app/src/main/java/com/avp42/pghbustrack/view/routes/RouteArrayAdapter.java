@@ -2,6 +2,7 @@ package com.avp42.pghbustrack.view.routes;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.util.Util;
+import com.avp42.pghbustrack.view.FontLoader;
 import java.util.List;
 import static com.avp42.pghbustrack.util.Constants.App.ROUTE_LIST_GRADIENT_FACTOR;
 
@@ -36,9 +38,11 @@ public class RouteArrayAdapter extends ArrayAdapter<Route> {
 
     TextView routeNameView = (TextView) convertView.findViewById(R.id.tv_route_name);
     routeNameView.setText(route.getName());
+    routeNameView.setTypeface(FontLoader.getTypeface(getContext(), FontLoader.ARMATA));
 
     TextView routeIdView = (TextView) convertView.findViewById(R.id.tv_route_id);
     routeIdView.setText(route.getId());
+    routeIdView.setTypeface(FontLoader.getTypeface(getContext(), FontLoader.ARMATA));
 
     return convertView;
   }

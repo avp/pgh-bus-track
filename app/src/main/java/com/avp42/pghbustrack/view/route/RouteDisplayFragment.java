@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.avp42.pghbustrack.R;
@@ -20,6 +20,7 @@ import com.avp42.pghbustrack.models.direction.Direction;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.models.stop.Stop;
 import com.avp42.pghbustrack.util.Util;
+import com.avp42.pghbustrack.view.FontLoader;
 import com.avp42.pghbustrack.view.MainActivity;
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +29,7 @@ import static com.avp42.pghbustrack.util.Constants.App.ROUTE_LIST_GRADIENT_FACTO
 public class RouteDisplayFragment extends Fragment {
   private ListView stopListView;
 
-  private ProgressBar progressBar;
+  private RelativeLayout progressBar;
 
   public static RouteDisplayFragment newInstance(Route route) {
     RouteDisplayFragment fragment = new RouteDisplayFragment();
@@ -60,11 +61,13 @@ public class RouteDisplayFragment extends Fragment {
 
     TextView routeIdTextView = (TextView) view.findViewById(R.id.tv_route_id);
     routeIdTextView.setText(route.getId());
+    routeIdTextView.setTypeface(FontLoader.getTypeface(getActivity(),  FontLoader.ARMATA));
 
     TextView routeNameTextView = (TextView) view.findViewById(R.id.tv_route_name);
     routeNameTextView.setText(route.getName());
+    routeNameTextView.setTypeface(FontLoader.getTypeface(getActivity(),  FontLoader.ARMATA));
 
-    progressBar = (ProgressBar) view.findViewById(R.id.progress_routedisplay_loading);
+    progressBar = (RelativeLayout) view.findViewById(R.id.progress_routedisplay_loading);
 
     stopListView = (ListView) view.findViewById(R.id.lv_stops);
 

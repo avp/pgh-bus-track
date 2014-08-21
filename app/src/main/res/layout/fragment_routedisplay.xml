@@ -8,35 +8,32 @@
 
   <LinearLayout
     android:id="@+id/route_display_heading"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/holo_blue_dark"
+    android:paddingTop="10dp"
+    android:paddingBottom="20dp"
     android:orientation="vertical">
 
     <TextView
       android:id="@+id/tv_route_id"
-      android:layout_width="fill_parent"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"
       android:gravity="center"
-      android:textSize="55sp"
+      android:textSize="58sp"
       android:textColor="@android:color/white"
-      android:paddingTop="10dp"
-      android:paddingBottom="10dp"
-      android:layout_marginTop="20dp"
+      android:layout_marginBottom="10dp"
       tools:text="28X" />
 
     <TextView
       android:id="@+id/tv_route_name"
-      android:layout_width="fill_parent"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"
       android:gravity="center"
       android:textSize="25sp"
       android:textColor="@android:color/white"
-      android:paddingTop="0dp"
-      android:paddingBottom="10dp"
-      android:layout_marginBottom="20dp"
       tools:text="AIRPORT FLYER" />
 
   </LinearLayout>
@@ -44,7 +41,7 @@
   <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="match_parent">
 
     <ListView
       android:id="@+id/lv_stops"
@@ -57,13 +54,19 @@
       android:drawSelectorOnTop="false"
       android:visibility="gone" />
 
-    <ProgressBar
+    <RelativeLayout
       android:id="@+id/progress_routedisplay_loading"
-      android:layout_width="50dp"
-      android:layout_height="50dp"
-      android:layout_gravity="center"
-      android:visibility="visible"
-      android:indeterminate="true" />
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <ProgressBar
+        android:layout_width="@dimen/progressbar_size"
+        android:layout_height="@dimen/progressbar_size"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:indeterminate="true" />
+    </RelativeLayout>
   </LinearLayout>
 
 </LinearLayout>
