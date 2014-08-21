@@ -41,14 +41,29 @@
 
   </LinearLayout>
 
-  <ListView
-    android:id="@+id/lv_stops"
-    android:layout_width="fill_parent"
-    android:layout_height="0dp"
-    android:background="@android:color/white"
-    android:divider="@android:color/darker_gray"
-    android:dividerHeight="0.2dp"
-    android:layout_weight="1"
-    android:drawSelectorOnTop="false" />
+  <LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent">
+
+    <ListView
+      android:id="@+id/lv_stops"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:background="@android:color/white"
+      android:divider="@android:color/darker_gray"
+      android:dividerHeight="0.2dp"
+      android:layout_weight="1"
+      android:drawSelectorOnTop="false"
+      android:visibility="gone" />
+
+    <ProgressBar
+      android:id="@+id/progress_routedisplay_loading"
+      android:layout_width="50dp"
+      android:layout_height="50dp"
+      android:layout_gravity="center"
+      android:visibility="visible"
+      android:indeterminate="true" />
+  </LinearLayout>
 
 </LinearLayout>

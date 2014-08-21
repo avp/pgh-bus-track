@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.data.PaacApi;
@@ -29,6 +30,8 @@ public class RouteListFragment extends ListFragment {
 
   private TextView noRoutesLoadedTextView;
 
+  private RelativeLayout progressBar;
+
   public static RouteListFragment newInstance(int sectionNumber) {
     RouteListFragment fragment = new RouteListFragment();
     Bundle args = new Bundle();
@@ -44,6 +47,8 @@ public class RouteListFragment extends ListFragment {
     View view = inflater.inflate(R.layout.fragment_routelist, container, false);
 
     noRoutesLoadedTextView = (TextView) view.findViewById(R.id.tv_no_routes_loaded);
+
+    progressBar = (RelativeLayout) view.findViewById(R.id.progress_routelist_loading);
 
     return view;
   }
@@ -64,7 +69,6 @@ public class RouteListFragment extends ListFragment {
         } catch (IOException e) {
           Route route = new Route("28X", "AIRPORT", "#0099DD");
           return Lists.newArrayList(route, route, route, route, route, route, route, route, route);
-
         }
       }
 
@@ -99,5 +103,7 @@ public class RouteListFragment extends ListFragment {
     listView.setEmptyView(noRoutesLoadedTextView);
     RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
     listView.setAdapter(arrayAdapter);
+    listView.setVisibility(View.VISIBLE);
+    progressBar.setVisibility(View.GONE);
   }
 }

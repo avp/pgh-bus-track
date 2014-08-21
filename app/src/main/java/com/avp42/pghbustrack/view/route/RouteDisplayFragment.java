@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.avp42.pghbustrack.R;
@@ -26,6 +27,8 @@ import static com.avp42.pghbustrack.util.Constants.App.ROUTE_LIST_GRADIENT_FACTO
 
 public class RouteDisplayFragment extends Fragment {
   private ListView stopListView;
+
+  private ProgressBar progressBar;
 
   public static RouteDisplayFragment newInstance(Route route) {
     RouteDisplayFragment fragment = new RouteDisplayFragment();
@@ -61,6 +64,8 @@ public class RouteDisplayFragment extends Fragment {
     TextView routeNameTextView = (TextView) view.findViewById(R.id.tv_route_name);
     routeNameTextView.setText(route.getName());
 
+    progressBar = (ProgressBar) view.findViewById(R.id.progress_routedisplay_loading);
+
     stopListView = (ListView) view.findViewById(R.id.lv_stops);
 
     return view;
@@ -87,6 +92,8 @@ public class RouteDisplayFragment extends Fragment {
         }
         StopArrayAdapter stopArrayAdapter = new StopArrayAdapter(getActivity(), stops);
         stopListView.setAdapter(stopArrayAdapter);
+        stopListView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
       }
     }.execute();
   }

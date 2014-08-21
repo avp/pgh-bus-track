@@ -13,6 +13,7 @@
     android:dividerHeight="0dp"
     android:background="@android:color/white"
     android:layout_weight="1"
+    android:visibility="gone"
     android:drawSelectorOnTop="false" />
 
   <TextView
@@ -24,5 +25,19 @@
     android:gravity="center"
     android:visibility="gone"
     android:text="@string/no_route_info_available" />
+
+  <RelativeLayout
+    android:id="@+id/progress_routelist_loading"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <ProgressBar
+      android:layout_centerInParent="true"
+      android:layout_width="@dimen/progressbar_size"
+      android:layout_height="@dimen/progressbar_size"
+      android:layout_gravity="center"
+      android:layout_marginLeft="0dp"
+      android:layout_marginTop="459dp" />
+  </RelativeLayout>
 
 </LinearLayout>
