@@ -11,8 +11,8 @@ import com.avp42.pghbustrack.models.stop.Stop;
 import java.util.List;
 
 public class StopArrayAdapter extends ArrayAdapter<Stop> {
-  public StopArrayAdapter(Context context, List<Stop> vehicles) {
-    super(context, R.layout.list_element_stop, vehicles);
+  public StopArrayAdapter(Context context, List<Stop> stops) {
+    super(context, R.layout.list_element_stop, stops);
   }
 
   @Override

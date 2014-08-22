@@ -1,6 +1,8 @@
 package com.avp42.pghbustrack.util;
 
 import android.graphics.Color;
+import com.google.common.collect.Lists;
+import java.util.List;
 
 public class Util {
   private Util() {
@@ -16,5 +18,14 @@ public class Util {
     Color.colorToHSV(color, hsv);
     hsv[2] *= factor;
     return Color.HSVToColor(hsv);
+  }
+
+  public static <T> List<List<T>> partitionList(List<T> list, int partitionSize) {
+    List<List<T>> partitions = Lists.newArrayList();
+    for (int i = 0; i < list.size(); i += partitionSize) {
+      List<T> sublist = list.subList(i, i + Math.min(partitionSize, list.size() - i));
+      partitions.add(sublist);
+    }
+    return partitions;
   }
 }

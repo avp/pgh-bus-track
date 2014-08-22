@@ -41,7 +41,7 @@ dependencies {
 
   compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.3.2'
 
-  compile group: 'joda-time', name: 'joda-time', version: '1.6.1'
+  compile group: 'joda-time', name: 'joda-time', version: '2.3'
 
   compile group: 'commons-io', name: 'commons-io', version: '2.4'
 }

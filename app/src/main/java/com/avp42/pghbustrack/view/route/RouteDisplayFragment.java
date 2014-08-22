@@ -2,6 +2,7 @@ package com.avp42.pghbustrack.view.route;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,11 +10,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.data.PaacApi;
 import com.avp42.pghbustrack.models.direction.Direction;
@@ -22,6 +23,7 @@ import com.avp42.pghbustrack.models.stop.Stop;
 import com.avp42.pghbustrack.util.Util;
 import com.avp42.pghbustrack.view.FontLoader;
 import com.avp42.pghbustrack.view.MainActivity;
+import com.avp42.pghbustrack.view.stop.StopDisplayFragment;
 import java.io.IOException;
 import java.util.List;
 import static com.avp42.pghbustrack.util.Constants.App.ROUTE_LIST_GRADIENT_FACTOR;
@@ -56,16 +58,16 @@ public class RouteDisplayFragment extends Fragment {
     LinearLayout layoutHeading = (LinearLayout) view.findViewById(R.id.route_display_heading);
     int darkColor = route.getDarkColor();
     GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-        new int[]{darkColor, Util.darken(darkColor, ROUTE_LIST_GRADIENT_FACTOR)});
+        new int[] {darkColor, Util.darken(darkColor, ROUTE_LIST_GRADIENT_FACTOR)});
     layoutHeading.setBackgroundDrawable(gradientDrawable);
 
     TextView routeIdTextView = (TextView) view.findViewById(R.id.tv_route_id);
     routeIdTextView.setText(route.getId());
-    routeIdTextView.setTypeface(FontLoader.getTypeface(getActivity(),  FontLoader.ARMATA));
+    routeIdTextView.setTypeface(FontLoader.getTypeface(getActivity(), FontLoader.ARMATA));
 
     TextView routeNameTextView = (TextView) view.findViewById(R.id.tv_route_name);
     routeNameTextView.setText(route.getName());
-    routeNameTextView.setTypeface(FontLoader.getTypeface(getActivity(),  FontLoader.ARMATA));
+    routeNameTextView.setTypeface(FontLoader.getTypeface(getActivity(), FontLoader.ARMATA));
 
     progressBar = (RelativeLayout) view.findViewById(R.id.progress_routedisplay_loading);
 
@@ -89,16 +91,55 @@ public class RouteDisplayFragment extends Fragment {
       @Override
       protected void onPostExecute(List<Stop> stops) {
         super.onPostExecute(stops);
-        if (stops == null) {
-          Toast.makeText(getActivity(), "Unable to retrieve route information.", Toast.LENGTH_LONG).show();
-          return;
-        }
-        StopArrayAdapter stopArrayAdapter = new StopArrayAdapter(getActivity(), stops);
-        stopListView.setAdapter(stopArrayAdapter);
-        stopListView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.GONE);
+        setStops(stops);
       }
     }.execute();
+  }
+
+  private void setStops(final List<Stop> stops) {
+    StopArrayAdapter stopArrayAdapter = new StopArrayAdapter(getActivity(), stops);
+    stopListView.setAdapter(stopArrayAdapter);
+    stopListView.setVisibility(View.VISIBLE);
+    progressBar.setVisibility(View.GONE);
+
+    final RouteDisplayFragment thisFragment = this;
+    stopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Stop stop = (Stop) stopListView.getAdapter().getItem(position);
+        FragmentManager fragmentManager = getActivity().getFragmentManager();
+        fragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+            .remove(thisFragment)
+            .add(R.id.container, StopDisplayFragment.newInstance(stop))
+            .addToBackStack(null)
+            .commit();
+      }
+    });
+
+//    class GetPredictionTask extends AsyncTask<Stop, Void, List<Prediction>> {
+//      @Override
+//      protected List<Prediction> doInBackground(Stop... stops) {
+//        try {
+//          Log.d("DEBUG", "" + stops.length);
+//          List<Prediction> predictions = PaacApi.getInstance().getPredictions(Lists.newArrayList(stops));
+//          Log.d("DEBUG", predictions.toString());
+//          return predictions;
+//        } catch (IOException e) {
+//          return null;
+//        }
+//      }
+//
+//      @Override
+//      protected void onPostExecute(List<Prediction> predictions) {
+//        super.onPostExecute(predictions);
+//      }
+//    }
+//
+//    List<List<Stop>> stopPartitions = Util.partitionList(stops, 10);
+//    for (List<Stop> partition : stopPartitions) {
+//      new GetPredictionTask().execute(partition.toArray(new Stop[partition.size()]));
+//    }
   }
 
   @Override

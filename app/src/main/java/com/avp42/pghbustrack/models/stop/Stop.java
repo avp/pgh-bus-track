@@ -1,8 +1,11 @@
 package com.avp42.pghbustrack.models.stop;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
-public class Stop {
+public class Stop implements Serializable {
+  private static final long serialVersionUID = -8185932649815385844L;
+
   @SerializedName("stpid")
   private String id;
 

@@ -2,7 +2,11 @@ package com.avp42.pghbustrack.data;
 
 import android.net.Uri;
 import android.util.Log;
+import com.avp42.pghbustrack.models.DateTimeDeserializer;
 import com.avp42.pghbustrack.models.direction.Direction;
+import com.avp42.pghbustrack.models.prediction.Prediction;
+import com.avp42.pghbustrack.models.prediction.PredictionType;
+import com.avp42.pghbustrack.models.prediction.PredictionTypeDeserializer;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.models.stop.Stop;
 import com.avp42.pghbustrack.models.vehicle.Vehicle;
@@ -11,6 +15,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.IOUtils;
@@ -21,6 +26,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.joda.time.DateTime;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -33,12 +39,15 @@ import static com.avp42.pghbustrack.util.Constants.App.LOG_TAG;
 public class PaacApi {
   private static final HttpClient httpClient = new DefaultHttpClient();
 
-  private static final Gson gson = new GsonBuilder().create();
+  private static final Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
+      .registerTypeAdapter(PredictionType.class, new PredictionTypeDeserializer())
+      .create();
 
   private static final Type vehicleListType = new TypeToken<List<Vehicle>>() { }.getType();
   private static final Type routeListType = new TypeToken<List<Route>>() { }.getType();
   private static final Type stopListType = new TypeToken<List<Stop>>() { }.getType();
   private static final Type directionListType = new TypeToken<List<Direction>>() { }.getType();
+  private static final Type predictionListType = new TypeToken<List<Prediction>>() { }.getType();
 
   private static final PaacApi INSTANCE = new PaacApi();
 
@@ -114,6 +123,28 @@ public class PaacApi {
         .getAsJsonArray();
     List<Stop> stops = gson.fromJson(jsonArray, stopListType);
     return stops;
+  }
+
+  public List<Prediction> getPredictions(List<Stop> stops) throws IOException {
+    Log.d(LOG_TAG, "Executing Prediction Request");
+    Map<String, String> params = Maps.newHashMap();
+    List<String> stopIds = Lists.newArrayList();
+    for (Stop stop : stops) {
+      stopIds.add(stop.getId());
+    }
+    params.put("stpid", StringUtils.join(stopIds, ","));
+    String json = executeRequest("/getpredictions", params);
+
+    JsonElement jsonElement = new JsonParser().parse(json)
+        .getAsJsonObject()
+        .get("bustime-response")
+        .getAsJsonObject()
+        .get("prd");
+
+    if (jsonElement != null) {
+      return gson.fromJson(jsonElement.getAsJsonArray(), predictionListType);
+    }
+    return Lists.newArrayList();
   }
 
   protected String executeRequest(String url, Map<String, String> params) throws IOException {

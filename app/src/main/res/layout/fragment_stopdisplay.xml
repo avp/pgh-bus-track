@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <LinearLayout
+    android:id="@+id/stop_display_heading"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/holo_blue_dark"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/tv_stop_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:gravity="center"
+      android:textSize="20sp"
+      android:textColor="@android:color/white"
+      tools:text="Forbes Ave at Morewood" />
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+      android:id="@+id/lv_predictions"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:background="@android:color/white"
+      android:divider="@android:color/darker_gray"
+      android:dividerHeight="0.2dp"
+      android:layout_weight="1"
+      android:drawSelectorOnTop="false"
+      android:visibility="gone" />
+
+    <RelativeLayout
+      android:id="@+id/progress_stopdisplay_loading"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <ProgressBar
+        android:layout_width="@dimen/progressbar_size"
+        android:layout_height="@dimen/progressbar_size"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:indeterminate="true" />
+    </RelativeLayout>
+  </LinearLayout>
+
+</LinearLayout>

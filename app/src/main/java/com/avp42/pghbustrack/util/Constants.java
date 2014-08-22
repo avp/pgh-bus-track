@@ -3,7 +3,7 @@ package com.avp42.pghbustrack.util;
 public class Constants {
   public static class App {
     public static final String LOG_TAG = "PghBusTrack";
-    public static final double ROUTE_LIST_GRADIENT_FACTOR = 0.85;
+    public static final double ROUTE_LIST_GRADIENT_FACTOR = 0.55;
 
   }
 
