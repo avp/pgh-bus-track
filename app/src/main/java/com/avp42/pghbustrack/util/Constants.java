@@ -4,7 +4,11 @@ public class Constants {
   public static class App {
     public static final String LOG_TAG = "PghBusTrack";
     public static final double ROUTE_LIST_GRADIENT_FACTOR = 0.55;
+  }
 
+  public static class Location {
+    public static final int UPDATE_INTERVAL = 10000;
+    public static final int FASTEST_INTERVAL = 5000;
   }
 
   public static class Api {

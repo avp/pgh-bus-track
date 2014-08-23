@@ -53,10 +53,12 @@
       android:dividerHeight="0.2dp"
       android:layout_weight="1"
       android:drawSelectorOnTop="false"
-      android:visibility="gone" />
+      android:visibility="visible"
+      tools:listitem="@layout/list_element_stop" />
 
     <RelativeLayout
       android:id="@+id/progress_routedisplay_loading"
+      android:visibility="gone"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
@@ -65,7 +67,6 @@
         android:layout_height="@dimen/progressbar_size"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:visibility="visible"
         android:indeterminate="true" />
     </RelativeLayout>
   </LinearLayout>

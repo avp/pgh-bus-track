@@ -28,4 +28,8 @@ public class Util {
     }
     return partitions;
   }
+
+  public static double metersToMiles(double meters) {
+    return meters * 0.000621371192;
+  }
 }

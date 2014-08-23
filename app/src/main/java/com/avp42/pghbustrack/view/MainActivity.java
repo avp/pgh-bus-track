@@ -3,14 +3,25 @@ package com.avp42.pghbustrack.view;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.view.routes.RouteListFragment;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import static com.avp42.pghbustrack.util.Constants.Location.FASTEST_INTERVAL;
+import static com.avp42.pghbustrack.util.Constants.Location.UPDATE_INTERVAL;
 
 
-public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends Activity
+    implements NavigationDrawerFragment.NavigationDrawerCallbacks, LocationListener,
+    GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
   /**
    * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
    */
@@ -20,6 +31,10 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
    * Used to store the last screen title. For use in {@link #restoreActionBar()}.
    */
   private CharSequence lastScreenTitle;
+
+  private LocationClient locationClient;
+  private LocationRequest locationRequest;
+  private Location location;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +46,25 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
     // Set up the drawer.
     navigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+
+    // Set up location.
+    locationClient = new LocationClient(this, this, this);
+    locationRequest = LocationRequest.create()
+        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+        .setInterval(UPDATE_INTERVAL)
+        .setFastestInterval(FASTEST_INTERVAL);
+  }
+
+  @Override
+  protected void onStart() {
+    super.onStart();
+    locationClient.connect();
+  }
+
+  @Override
+  protected void onStop() {
+    locationClient.disconnect();
+    super.onStop();
   }
 
   @Override
@@ -78,5 +112,27 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
   public NavigationDrawerFragment getNavigationDrawerFragment() {
     return navigationDrawerFragment;
+  }
+
+  public Location getLocation() {
+    return locationClient.getLastLocation();
+  }
+
+  @Override
+  public void onConnected(Bundle bundle) {
+    locationClient.requestLocationUpdates(locationRequest, this);
+    Log.d("DEBUG", "Connected to location services.");
+  }
+
+  @Override
+  public void onDisconnected() {}
+
+  @Override
+  public void onConnectionFailed(ConnectionResult connectionResult) {}
+
+  @Override
+  public void onLocationChanged(Location location) {
+    this.location = location;
+    Log.d("DEBUG", location.getLatitude() + " " + location.getLongitude());
   }
 }

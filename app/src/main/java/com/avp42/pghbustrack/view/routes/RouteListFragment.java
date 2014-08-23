@@ -46,7 +46,7 @@ public class RouteListFragment extends ListFragment {
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_routelist, container, false);
 
-    noRoutesLoadedTextView = (TextView) view.findViewById(R.id.tv_no_routes_loaded);
+//    noRoutesLoadedTextView = (TextView) view.findViewById(R.id.tv_no_routes_loaded);
 
     progressBar = (RelativeLayout) view.findViewById(R.id.progress_routelist_loading);
 
@@ -67,8 +67,7 @@ public class RouteListFragment extends ListFragment {
         try {
           return PaacApi.getInstance().getRoutes();
         } catch (IOException e) {
-          Route route = new Route("28X", "AIRPORT", "#0099DD");
-          return Lists.newArrayList(route, route, route, route, route, route, route, route, route);
+          return Lists.newArrayList();
         }
       }
 
@@ -100,7 +99,7 @@ public class RouteListFragment extends ListFragment {
 
   private void setRoutes(List<Route> routes) {
     ListView listView = getListView();
-    listView.setEmptyView(noRoutesLoadedTextView);
+//    listView.setEmptyView(noRoutesLoadedTextView);
     RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
     listView.setAdapter(arrayAdapter);
     listView.setVisibility(View.VISIBLE);
