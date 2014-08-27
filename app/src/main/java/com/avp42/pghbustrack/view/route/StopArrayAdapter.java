@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.models.stop.Stop;
+import com.avp42.pghbustrack.util.Util;
 import com.avp42.pghbustrack.view.MainActivity;
 import java.util.List;
 
@@ -25,8 +26,11 @@ public class StopArrayAdapter extends ArrayAdapter<Stop> {
     }
 
     TextView stopIdTextView = (TextView) convertView.findViewById(R.id.tv_stop_name);
+    stopIdTextView.setText(stop.getName());
+
+    TextView stopDistanceTextView = (TextView) convertView.findViewById(R.id.tv_stop_distance);
     Location curLocation = ((MainActivity) getContext()).getLocation();
-    stopIdTextView.setText(stop.getName() + "\n" + stop.distanceFrom(curLocation) + " miles");
+    stopDistanceTextView.setText(Util.humanizeDistance(stop.distanceFrom(curLocation)));
 
     return convertView;
   }

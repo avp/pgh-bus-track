@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.graphics.drawable.GradientDrawable;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,6 +26,8 @@ import com.avp42.pghbustrack.view.FontLoader;
 import com.avp42.pghbustrack.view.MainActivity;
 import com.avp42.pghbustrack.view.stop.StopDisplayFragment;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import static com.avp42.pghbustrack.util.Constants.App.ROUTE_LIST_GRADIENT_FACTOR;
 
@@ -47,7 +50,6 @@ public class RouteDisplayFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_routedisplay, container, false);
     Route route = (Route) getArguments().getSerializable("route");
-    getVehicleInfo(route);
 
     ActionBar actionBar = getActivity().getActionBar();
     if (actionBar != null) {
@@ -73,10 +75,14 @@ public class RouteDisplayFragment extends Fragment {
 
     stopListView = (ListView) view.findViewById(R.id.lv_stops);
 
+    getStopInfo(route);
     return view;
   }
 
-  private void getVehicleInfo(final Route route) {
+  private void getStopInfo(final Route route) {
+    progressBar.setVisibility(View.VISIBLE);
+    stopListView.setVisibility(View.GONE);
+
     new AsyncTask<Void, Void, List<Stop>>() {
       @Override
       protected List<Stop> doInBackground(Void... params) {
@@ -101,6 +107,14 @@ public class RouteDisplayFragment extends Fragment {
     stopListView.setAdapter(stopArrayAdapter);
     stopListView.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
+
+    Collections.sort(stops, new Comparator<Stop>() {
+      @Override
+      public int compare(Stop lhs, Stop rhs) {
+        Location curLocation = ((MainActivity) getActivity()).getLocation();
+        return Double.compare(lhs.distanceFrom(curLocation), rhs.distanceFrom(curLocation));
+      }
+    });
 
     final RouteDisplayFragment thisFragment = this;
     stopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -4,7 +4,8 @@
   android:id="@+id/route_list_layout"
   android:orientation="vertical"
   android:background="@android:color/white"
-  android:layout_width="fill_parent"
+  android:padding="15dp"
+  android:layout_width="match_parent"
   android:layout_height="wrap_content">
 
   <TextView
@@ -12,10 +13,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:paddingLeft="15dp"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp"
+    android:layout_marginBottom="5dp"
     android:layout_gravity="center_vertical"
     android:textSize="20sp"
+    tools:text="Forbes Ave at Morewood" />
+
+  <TextView
+    android:id="@+id/tv_stop_distance"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:layout_gravity="center_vertical"
+    android:textColor="#555"
+    android:textSize="18sp"
     tools:text="Forbes Ave at Morewood" />
 </LinearLayout>

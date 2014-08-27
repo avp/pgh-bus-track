@@ -6,7 +6,6 @@ import android.app.FragmentManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.view.routes.RouteListFragment;
@@ -121,7 +120,6 @@ public class MainActivity extends Activity
   @Override
   public void onConnected(Bundle bundle) {
     locationClient.requestLocationUpdates(locationRequest, this);
-    Log.d("DEBUG", "Connected to location services.");
   }
 
   @Override
@@ -133,6 +131,5 @@ public class MainActivity extends Activity
   @Override
   public void onLocationChanged(Location location) {
     this.location = location;
-    Log.d("DEBUG", location.getLatitude() + " " + location.getLongitude());
   }
 }

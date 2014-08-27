@@ -1,7 +1,6 @@
 package com.avp42.pghbustrack.models.stop;
 
 import android.location.Location;
-import com.avp42.pghbustrack.util.Util;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
@@ -31,7 +30,7 @@ public class Stop implements Serializable {
   public double distanceFrom(Location location) {
     float[] results = new float[3];
     Location.distanceBetween(this.latitude, this.longitude, location.getLatitude(), location.getLongitude(), results);
-    return Util.metersToMiles(results[0]);
+    return results[0];
   }
 
   public String toString() {

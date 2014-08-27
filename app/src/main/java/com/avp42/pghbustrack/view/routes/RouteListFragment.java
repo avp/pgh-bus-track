@@ -20,6 +20,8 @@ import com.avp42.pghbustrack.view.MainActivity;
 import com.avp42.pghbustrack.view.route.RouteDisplayFragment;
 import com.google.common.collect.Lists;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -46,8 +48,6 @@ public class RouteListFragment extends ListFragment {
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_routelist, container, false);
 
-//    noRoutesLoadedTextView = (TextView) view.findViewById(R.id.tv_no_routes_loaded);
-
     progressBar = (RelativeLayout) view.findViewById(R.id.progress_routelist_loading);
 
     return view;
@@ -60,6 +60,9 @@ public class RouteListFragment extends ListFragment {
     if (actionBar != null) {
       ((MainActivity) getActivity()).getNavigationDrawerFragment().setDrawerIndicatorEnabled(true);
     }
+
+    progressBar.setVisibility(View.VISIBLE);
+    getListView().setVisibility(View.GONE);
 
     new AsyncTask<Void, Void, List<Route>>() {
       @Override
@@ -98,8 +101,14 @@ public class RouteListFragment extends ListFragment {
   }
 
   private void setRoutes(List<Route> routes) {
+    Collections.sort(routes, new Comparator<Route>() {
+      @Override
+      public int compare(Route lhs, Route rhs) {
+        return lhs.getId().compareTo(rhs.getId());
+      }
+    });
+
     ListView listView = getListView();
-//    listView.setEmptyView(noRoutesLoadedTextView);
     RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
     listView.setAdapter(arrayAdapter);
     listView.setVisibility(View.VISIBLE);

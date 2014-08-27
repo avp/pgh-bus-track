@@ -29,7 +29,19 @@ public class Util {
     return partitions;
   }
 
-  public static double metersToMiles(double meters) {
+  public static String humanizeDistance(double meters) {
+    double miles = metersToMiles(meters);
+    if (miles < 1) {
+      return milesToFeet(miles) + " feet";
+    }
+    return Math.round(miles * 100.0) / 100.0 + " miles";
+  }
+
+  private static double metersToMiles(double meters) {
     return meters * 0.000621371192;
+  }
+
+  private static int milesToFeet(double miles) {
+    return (int) miles / 5280;
   }
 }
