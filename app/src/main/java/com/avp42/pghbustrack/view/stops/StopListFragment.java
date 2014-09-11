@@ -63,6 +63,7 @@ public class StopListFragment extends ListFragment {
 
     progressBar.setVisibility(View.VISIBLE);
     getListView().setVisibility(View.GONE);
+    getListView().getEmptyView().setVisibility(View.GONE);
 
     new AsyncTask<Void, Void, List<Stop>>() {
       @Override
@@ -112,9 +113,11 @@ public class StopListFragment extends ListFragment {
     });
 
     ListView listView = getListView();
+    listView.setVisibility(View.VISIBLE);
+    listView.getEmptyView().setVisibility(View.VISIBLE);
+    progressBar.setVisibility(View.GONE);
+
     StopArrayAdapter arrayAdapter = new StopArrayAdapter(getActivity(), stops);
     listView.setAdapter(arrayAdapter);
-    listView.setVisibility(View.VISIBLE);
-    progressBar.setVisibility(View.GONE);
   }
 }

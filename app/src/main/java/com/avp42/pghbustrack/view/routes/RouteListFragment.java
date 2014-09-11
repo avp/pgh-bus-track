@@ -60,8 +60,14 @@ public class RouteListFragment extends ListFragment {
 
     progressBar.setVisibility(View.VISIBLE);
     getListView().setVisibility(View.GONE);
+    getListView().getEmptyView().setVisibility(View.GONE);
 
     new AsyncTask<Void, Void, List<Route>>() {
+      @Override
+      protected void onPreExecute() {
+        super.onPreExecute();
+      }
+
       @Override
       protected List<Route> doInBackground(Void... params) {
         try {
@@ -106,9 +112,11 @@ public class RouteListFragment extends ListFragment {
     });
 
     ListView listView = getListView();
+    listView.setVisibility(View.VISIBLE);
+    listView.getEmptyView().setVisibility(View.VISIBLE);
+    progressBar.setVisibility(View.GONE);
+
     RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
     listView.setAdapter(arrayAdapter);
-    listView.setVisibility(View.VISIBLE);
-    progressBar.setVisibility(View.GONE);
   }
 }
