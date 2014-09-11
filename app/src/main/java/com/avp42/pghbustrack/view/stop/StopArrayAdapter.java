@@ -1,4 +1,4 @@
-package com.avp42.pghbustrack.view.route;
+package com.avp42.pghbustrack.view.stop;
 
 import android.content.Context;
 import android.location.Location;

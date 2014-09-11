@@ -1,9 +1,10 @@
-package com.avp42.pghbustrack.view.routes;
+package com.avp42.pghbustrack.view.stops;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ListFragment;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,9 +16,10 @@ import android.widget.RelativeLayout;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.data.PaacApi;
 import com.avp42.pghbustrack.models.route.Route;
+import com.avp42.pghbustrack.models.stop.Stop;
 import com.avp42.pghbustrack.view.MainActivity;
-import com.avp42.pghbustrack.view.route.RouteArrayAdapter;
-import com.avp42.pghbustrack.view.route.RouteDisplayFragment;
+import com.avp42.pghbustrack.view.stop.StopArrayAdapter;
+import com.avp42.pghbustrack.view.stop.StopDisplayFragment;
 import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.util.Collections;
@@ -27,26 +29,27 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class RouteListFragment extends ListFragment {
+public class StopListFragment extends ListFragment {
   private static final String ARG_SECTION_NUMBER = "section_number";
 
   private RelativeLayout progressBar;
 
-  public static RouteListFragment newInstance(int sectionNumber) {
-    RouteListFragment fragment = new RouteListFragment();
+  public static StopListFragment newInstance(int sectionNumber) {
+    StopListFragment fragment = new StopListFragment();
     Bundle args = new Bundle();
     args.putInt(ARG_SECTION_NUMBER, sectionNumber);
     fragment.setArguments(args);
     return fragment;
   }
 
-  public RouteListFragment() {}
+  public StopListFragment() {}
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_routelist, container, false);
+    View view = inflater.inflate(R.layout.fragment_stoplist, container, false);
 
-    progressBar = (RelativeLayout) view.findViewById(R.id.progress_routelist_loading);
+    progressBar = (RelativeLayout) view.findViewById(R.id.progress_stoplist_loading);
+
     return view;
   }
 
@@ -61,19 +64,21 @@ public class RouteListFragment extends ListFragment {
     progressBar.setVisibility(View.VISIBLE);
     getListView().setVisibility(View.GONE);
 
-    new AsyncTask<Void, Void, List<Route>>() {
+    new AsyncTask<Void, Void, List<Stop>>() {
       @Override
-      protected List<Route> doInBackground(Void... params) {
+      protected List<Stop> doInBackground(Void... params) {
         try {
-          return PaacApi.getInstance().getRoutes();
+          PaacApi api = PaacApi.getInstance();
+          Route route = api.getRoutes().get(0);
+          return api.getStops(route, api.getDirections(route).get(0));
         } catch (IOException e) {
           return Lists.newArrayList();
         }
       }
 
       @Override
-      protected void onPostExecute(List<Route> routes) {
-        setRoutes(routes);
+      protected void onPostExecute(List<Stop> stops) {
+        setStops(stops);
       }
     }.execute();
   }
@@ -87,26 +92,27 @@ public class RouteListFragment extends ListFragment {
   @Override
   public void onListItemClick(ListView listView, View view, int position, long id) {
     super.onListItemClick(listView, view, position, id);
-    Route route = (Route) listView.getAdapter().getItem(position);
+    Stop stop = (Stop) listView.getAdapter().getItem(position);
     FragmentManager fragmentManager = getActivity().getFragmentManager();
     fragmentManager.beginTransaction()
         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
         .remove(this)
-        .add(R.id.container, RouteDisplayFragment.newInstance(route))
+        .add(R.id.container, StopDisplayFragment.newInstance(stop))
         .addToBackStack(null)
         .commit();
   }
 
-  private void setRoutes(List<Route> routes) {
-    Collections.sort(routes, new Comparator<Route>() {
+  private void setStops(List<Stop> stops) {
+    Collections.sort(stops, new Comparator<Stop>() {
       @Override
-      public int compare(Route lhs, Route rhs) {
-        return lhs.getId().compareTo(rhs.getId());
+      public int compare(Stop lhs, Stop rhs) {
+        Location curLocation = ((MainActivity) getActivity()).getLocation();
+        return Double.compare(lhs.distanceFrom(curLocation), rhs.distanceFrom(curLocation));
       }
     });
 
     ListView listView = getListView();
-    RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
+    StopArrayAdapter arrayAdapter = new StopArrayAdapter(getActivity(), stops);
     listView.setAdapter(arrayAdapter);
     listView.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);

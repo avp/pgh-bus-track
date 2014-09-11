@@ -1,8 +1,7 @@
-package com.avp42.pghbustrack.view.routes;
+package com.avp42.pghbustrack.view.route;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

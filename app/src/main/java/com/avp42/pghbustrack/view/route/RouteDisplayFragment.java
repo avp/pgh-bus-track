@@ -24,6 +24,7 @@ import com.avp42.pghbustrack.models.stop.Stop;
 import com.avp42.pghbustrack.util.Util;
 import com.avp42.pghbustrack.view.FontLoader;
 import com.avp42.pghbustrack.view.MainActivity;
+import com.avp42.pghbustrack.view.stop.StopArrayAdapter;
 import com.avp42.pghbustrack.view.stop.StopDisplayFragment;
 import java.io.IOException;
 import java.util.Collections;

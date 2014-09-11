@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.view.routes.RouteListFragment;
+import com.avp42.pghbustrack.view.stops.StopListFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
@@ -33,7 +34,6 @@ public class MainActivity extends Activity
 
   private LocationClient locationClient;
   private LocationRequest locationRequest;
-  private Location location;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,16 @@ public class MainActivity extends Activity
   public void onNavigationDrawerItemSelected(int position) {
     // update the main content by replacing fragments
     FragmentManager fragmentManager = getFragmentManager();
-    fragmentManager.beginTransaction().replace(R.id.container, RouteListFragment.newInstance(position + 1)).commit();
+    switch (position) {
+      case 0:
+        fragmentManager.beginTransaction()
+            .replace(R.id.container, RouteListFragment.newInstance(position + 1))
+            .commit();
+        break;
+      case 1:
+        fragmentManager.beginTransaction().replace(R.id.container, StopListFragment.newInstance(position + 1)).commit();
+        break;
+    }
   }
 
   public void onSectionAttached(int number) {
@@ -80,9 +89,6 @@ public class MainActivity extends Activity
         break;
       case 2:
         lastScreenTitle = getString(R.string.title_section2);
-        break;
-      case 3:
-        lastScreenTitle = getString(R.string.title_section3);
         break;
     }
   }
@@ -129,7 +135,5 @@ public class MainActivity extends Activity
   public void onConnectionFailed(ConnectionResult connectionResult) {}
 
   @Override
-  public void onLocationChanged(Location location) {
-    this.location = location;
-  }
+  public void onLocationChanged(Location location) {}
 }
