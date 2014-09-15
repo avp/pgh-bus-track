@@ -22,8 +22,14 @@ public class PredictionArrayAdapter extends ArrayAdapter<Prediction> {
       convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_element_prediction, parent, false);
     }
 
-    TextView stopIdTextView = (TextView) convertView.findViewById(R.id.tv_stop_name);
-    stopIdTextView.setText(prediction.getRouteId() + " " + prediction.getPredictionTime().toString("HH:mm"));
+    TextView routeIdTextView = (TextView) convertView.findViewById(R.id.tv_route_id);
+    routeIdTextView.setText(prediction.getRouteId());
+
+    TextView routeNameTextView = (TextView) convertView.findViewById(R.id.tv_route_name);
+    routeNameTextView.setText(prediction.getRouteId());
+
+    TextView predictionTimeTextView = (TextView) convertView.findViewById(R.id.tv_prediction_time);
+    predictionTimeTextView.setText(String.valueOf(prediction.getMinutesUntilPrediction()));
 
     return convertView;
   }

@@ -2,6 +2,7 @@ package com.avp42.pghbustrack.models.prediction;
 
 import com.google.gson.annotations.SerializedName;
 import org.joda.time.DateTime;
+import org.joda.time.Minutes;
 
 public class Prediction {
   @SerializedName("tmstmp")
@@ -43,6 +44,10 @@ public class Prediction {
 
   public DateTime getPredictionTime() {
     return predictionTime;
+  }
+
+  public int getMinutesUntilPrediction() {
+    return Minutes.minutesBetween(new DateTime(), predictionTime).getMinutes();
   }
 
   public String toString() {
