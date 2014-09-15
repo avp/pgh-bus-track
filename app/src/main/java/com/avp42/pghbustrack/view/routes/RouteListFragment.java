@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.data.PaacApi;
+import com.avp42.pghbustrack.data.RouteCache;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.view.MainActivity;
 import com.avp42.pghbustrack.view.route.RouteArrayAdapter;
@@ -110,6 +111,7 @@ public class RouteListFragment extends ListFragment {
         return lhs.getId().compareTo(rhs.getId());
       }
     });
+    RouteCache.updateRoutes(routes);
 
     ListView listView = getListView();
     listView.setVisibility(View.VISIBLE);
@@ -118,5 +120,6 @@ public class RouteListFragment extends ListFragment {
 
     RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
     listView.setAdapter(arrayAdapter);
+
   }
 }
