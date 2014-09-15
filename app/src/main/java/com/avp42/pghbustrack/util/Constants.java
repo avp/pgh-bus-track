@@ -4,6 +4,7 @@ public class Constants {
   public static class App {
     public static final String LOG_TAG = "PghBusTrack";
     public static final double ROUTE_LIST_GRADIENT_FACTOR = 0.55;
+    public static final double MAX_METERS_FOR_FEET = 1609.34 * 0.5; // Max number of meters for feet instead of miles
   }
 
   public static class Location {

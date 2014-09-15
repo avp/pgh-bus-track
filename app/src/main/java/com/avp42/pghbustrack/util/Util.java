@@ -1,8 +1,7 @@
 package com.avp42.pghbustrack.util;
 
 import android.graphics.Color;
-import com.google.common.collect.Lists;
-import java.util.List;
+import static com.avp42.pghbustrack.util.Constants.App.MAX_METERS_FOR_FEET;
 
 public class Util {
   private Util() {
@@ -20,20 +19,11 @@ public class Util {
     return Color.HSVToColor(hsv);
   }
 
-  public static <T> List<List<T>> partitionList(List<T> list, int partitionSize) {
-    List<List<T>> partitions = Lists.newArrayList();
-    for (int i = 0; i < list.size(); i += partitionSize) {
-      List<T> sublist = list.subList(i, i + Math.min(partitionSize, list.size() - i));
-      partitions.add(sublist);
-    }
-    return partitions;
-  }
-
   public static String humanizeDistance(double meters) {
-    double miles = metersToMiles(meters);
-    if (miles < 1) {
-      return milesToFeet(miles) + " feet";
+    if (meters < MAX_METERS_FOR_FEET) {
+      return metersToFeet(meters) + " feet";
     }
+    double miles = metersToMiles(meters);
     return Math.round(miles * 100.0) / 100.0 + " miles";
   }
 
@@ -41,7 +31,7 @@ public class Util {
     return meters * 0.000621371192;
   }
 
-  private static int milesToFeet(double miles) {
-    return (int) miles / 5280;
+  private static int metersToFeet(double meters) {
+    return (int) Math.round(meters * 3.28084);
   }
 }
