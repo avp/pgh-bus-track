@@ -42,8 +42,8 @@ public class Prediction {
     return routeId;
   }
 
-  public DateTime getPredictionTime() {
-    return predictionTime;
+  public String getRouteDirection() {
+    return routeDirection;
   }
 
   public int getMinutesUntilPrediction() {

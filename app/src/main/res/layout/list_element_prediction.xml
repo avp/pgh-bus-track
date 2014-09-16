@@ -21,18 +21,28 @@
       android:layout_height="wrap_content"
       android:background="@android:color/transparent"
       android:layout_gravity="center_vertical"
-      android:textSize="35sp"
+      android:textSize="32sp"
       tools:text="28X" />
 
     <TextView
       android:id="@+id/tv_route_name"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginTop="3dp"
+      android:background="@android:color/transparent"
+      android:layout_gravity="center_vertical"
+      android:textSize="15sp"
+      tools:text="AIRPORT FLYER" />
+
+    <TextView
+      android:id="@+id/tv_route_direction"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
       android:layout_marginTop="5dp"
       android:background="@android:color/transparent"
       android:layout_gravity="center_vertical"
-      android:textSize="20sp"
-      tools:text="Airport Flyer" />
+      android:textSize="15sp"
+      tools:text="OUTBOUND" />
   </LinearLayout>
 
   <LinearLayout
@@ -51,7 +61,7 @@
       android:layout_gravity="right"
       android:layout_margin="2dp"
       android:gravity="center"
-      android:textSize="35sp"
+      android:textSize="45sp"
       tools:text="30" />
 
     <TextView

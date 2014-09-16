@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.data.RouteCache;
 import com.avp42.pghbustrack.models.prediction.Prediction;
+import com.avp42.pghbustrack.models.route.Route;
 import java.util.List;
 
 public class PredictionArrayAdapter extends ArrayAdapter<Prediction> {
@@ -26,8 +27,14 @@ public class PredictionArrayAdapter extends ArrayAdapter<Prediction> {
     TextView routeIdTextView = (TextView) convertView.findViewById(R.id.tv_route_id);
     routeIdTextView.setText(prediction.getRouteId());
 
-    TextView routeNameTextView = (TextView) convertView.findViewById(R.id.tv_route_name);
-    routeNameTextView.setText(RouteCache.getRouteById(prediction.getRouteId()).getName());
+    Route route = RouteCache.getRouteById(prediction.getRouteId());
+    if (route != null) {
+      TextView routeNameTextView = (TextView) convertView.findViewById(R.id.tv_route_name);
+      routeNameTextView.setText(RouteCache.getRouteById(prediction.getRouteId()).getName());
+    }
+
+    TextView routeDirectionTextView = (TextView) convertView.findViewById(R.id.tv_route_direction);
+    routeDirectionTextView.setText(prediction.getRouteDirection());
 
     TextView predictionTimeTextView = (TextView) convertView.findViewById(R.id.tv_prediction_time);
     predictionTimeTextView.setText(String.valueOf(prediction.getMinutesUntilPrediction()));

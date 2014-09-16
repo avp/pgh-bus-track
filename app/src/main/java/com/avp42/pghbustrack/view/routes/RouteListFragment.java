@@ -59,9 +59,14 @@ public class RouteListFragment extends ListFragment {
       ((MainActivity) getActivity()).getNavigationDrawerFragment().setDrawerIndicatorEnabled(true);
     }
 
-    progressBar.setVisibility(View.VISIBLE);
-    getListView().setVisibility(View.GONE);
-    getListView().getEmptyView().setVisibility(View.GONE);
+    List<Route> cachedRoutes = RouteCache.getRoutes();
+    if (cachedRoutes.isEmpty()) {
+      progressBar.setVisibility(View.VISIBLE);
+      getListView().setVisibility(View.GONE);
+      getListView().getEmptyView().setVisibility(View.GONE);
+    } else {
+      setRoutes(cachedRoutes);
+    }
 
     new AsyncTask<Void, Void, List<Route>>() {
       @Override
@@ -111,6 +116,7 @@ public class RouteListFragment extends ListFragment {
         return lhs.getId().compareTo(rhs.getId());
       }
     });
+
     RouteCache.updateRoutes(routes);
 
     ListView listView = getListView();
@@ -120,6 +126,5 @@ public class RouteListFragment extends ListFragment {
 
     RouteArrayAdapter arrayAdapter = new RouteArrayAdapter(getActivity(), routes);
     listView.setAdapter(arrayAdapter);
-
   }
 }
