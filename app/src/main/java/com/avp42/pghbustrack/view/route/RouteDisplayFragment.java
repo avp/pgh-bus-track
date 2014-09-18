@@ -26,10 +26,14 @@ import com.avp42.pghbustrack.view.FontLoader;
 import com.avp42.pghbustrack.view.MainActivity;
 import com.avp42.pghbustrack.view.stop.StopArrayAdapter;
 import com.avp42.pghbustrack.view.stop.StopDisplayFragment;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import static com.avp42.pghbustrack.util.Constants.App.ROUTE_LIST_GRADIENT_FACTOR;
 
 public class RouteDisplayFragment extends Fragment {
@@ -62,6 +66,7 @@ public class RouteDisplayFragment extends Fragment {
     int darkColor = route.getDarkColor();
     GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
         new int[] {darkColor, Util.darken(darkColor, ROUTE_LIST_GRADIENT_FACTOR)});
+    //noinspection deprecation
     layoutHeading.setBackgroundDrawable(gradientDrawable);
 
     TextView routeIdTextView = (TextView) view.findViewById(R.id.tv_route_id);
@@ -84,26 +89,32 @@ public class RouteDisplayFragment extends Fragment {
     progressBar.setVisibility(View.VISIBLE);
     stopListView.setVisibility(View.GONE);
 
-    new AsyncTask<Void, Void, List<Stop>>() {
+    new AsyncTask<Void, Void, Set<Stop>>() {
       @Override
-      protected List<Stop> doInBackground(Void... params) {
+      protected Set<Stop> doInBackground(Void... params) {
         try {
           List<Direction> directions = PaacApi.getInstance().getDirections(route);
-          return PaacApi.getInstance().getStops(route, directions.get(0));
+          Set<Stop> stops = Sets.newHashSet();
+          for (Direction direction : directions) {
+            stops.addAll(PaacApi.getInstance().getStops(route, direction));
+          }
+          return stops;
         } catch (IOException e) {
-          return null;
+          return Sets.newHashSet();
         }
       }
 
       @Override
-      protected void onPostExecute(List<Stop> stops) {
+      protected void onPostExecute(Set<Stop> stops) {
         super.onPostExecute(stops);
         setStops(stops);
       }
     }.execute();
   }
 
-  private void setStops(final List<Stop> stops) {
+  private void setStops(final Collection<Stop> stopSet) {
+    List<Stop> stops = Lists.newArrayList(stopSet);
+
     StopArrayAdapter stopArrayAdapter = new StopArrayAdapter(getActivity(), stops);
     stopListView.setAdapter(stopArrayAdapter);
     stopListView.setVisibility(View.VISIBLE);
@@ -131,30 +142,6 @@ public class RouteDisplayFragment extends Fragment {
             .commit();
       }
     });
-
-//    class GetPredictionTask extends AsyncTask<Stop, Void, List<Prediction>> {
-//      @Override
-//      protected List<Prediction> doInBackground(Stop... stops) {
-//        try {
-//          Log.d("DEBUG", "" + stops.length);
-//          List<Prediction> predictions = PaacApi.getInstance().getPredictions(Lists.newArrayList(stops));
-//          Log.d("DEBUG", predictions.toString());
-//          return predictions;
-//        } catch (IOException e) {
-//          return null;
-//        }
-//      }
-//
-//      @Override
-//      protected void onPostExecute(List<Prediction> predictions) {
-//        super.onPostExecute(predictions);
-//      }
-//    }
-//
-//    List<List<Stop>> stopPartitions = Util.partitionList(stops, 10);
-//    for (List<Stop> partition : stopPartitions) {
-//      new GetPredictionTask().execute(partition.toArray(new Stop[partition.size()]));
-//    }
   }
 
   @Override

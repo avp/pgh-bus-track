@@ -33,7 +33,23 @@ public class Stop implements Serializable {
     return results[0];
   }
 
+  @Override
   public String toString() {
     return name;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Stop)) {
+      return false;
+    }
+
+    Stop otherStop = (Stop) other;
+    return id.equals(otherStop.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return id.hashCode();
   }
 }

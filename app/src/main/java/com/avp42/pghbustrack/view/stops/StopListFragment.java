@@ -15,16 +15,19 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import com.avp42.pghbustrack.R;
 import com.avp42.pghbustrack.data.PaacApi;
+import com.avp42.pghbustrack.models.direction.Direction;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.models.stop.Stop;
 import com.avp42.pghbustrack.view.MainActivity;
 import com.avp42.pghbustrack.view.stop.StopArrayAdapter;
 import com.avp42.pghbustrack.view.stop.StopDisplayFragment;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -65,20 +68,24 @@ public class StopListFragment extends ListFragment {
     getListView().setVisibility(View.GONE);
     getListView().getEmptyView().setVisibility(View.GONE);
 
-    new AsyncTask<Void, Void, List<Stop>>() {
+    new AsyncTask<Void, Void, Set<Stop>>() {
       @Override
-      protected List<Stop> doInBackground(Void... params) {
+      protected Set<Stop> doInBackground(Void... params) {
         try {
           PaacApi api = PaacApi.getInstance();
           Route route = api.getRoutes().get(0);
-          return api.getStops(route, api.getDirections(route).get(0));
+          Set<Stop> stops = Sets.newHashSet();
+          for (Direction direction : api.getDirections(route)) {
+            stops.addAll(api.getStops(route, direction));
+          }
+          return stops;
         } catch (IOException e) {
-          return Lists.newArrayList();
+          return Sets.newHashSet();
         }
       }
 
       @Override
-      protected void onPostExecute(List<Stop> stops) {
+      protected void onPostExecute(Set<Stop> stops) {
         setStops(stops);
       }
     }.execute();
@@ -103,7 +110,9 @@ public class StopListFragment extends ListFragment {
         .commit();
   }
 
-  private void setStops(List<Stop> stops) {
+  private void setStops(Set<Stop> stopSet) {
+    List<Stop> stops = Lists.newArrayList(stopSet);
+
     Collections.sort(stops, new Comparator<Stop>() {
       @Override
       public int compare(Stop lhs, Stop rhs) {
