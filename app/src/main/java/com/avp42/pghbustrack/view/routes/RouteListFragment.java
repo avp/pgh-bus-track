@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ListFragment;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,17 +13,14 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import com.avp42.pghbustrack.R;
+import com.avp42.pghbustrack.data.DataCache;
 import com.avp42.pghbustrack.data.PaacApi;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.view.MainActivity;
 import com.avp42.pghbustrack.view.route.RouteArrayAdapter;
 import com.avp42.pghbustrack.view.route.RouteDisplayFragment;
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -36,8 +32,6 @@ public class RouteListFragment extends ListFragment {
   private static final String ARG_SECTION_NUMBER = "section_number";
 
   private RelativeLayout progressBar;
-
-  private static Gson gson = new GsonBuilder().create();
 
   public static RouteListFragment newInstance(int sectionNumber) {
     RouteListFragment fragment = new RouteListFragment();
@@ -66,10 +60,7 @@ public class RouteListFragment extends ListFragment {
       ((MainActivity) getActivity()).getNavigationDrawerFragment().setDrawerIndicatorEnabled(true);
     }
 
-    Type routeListType = new TypeToken<List<Route>>() { }.getType();
-    List<Route> cachedRoutes = gson.fromJson(
-        getActivity().getSharedPreferences(getActivity().getPackageName(), Context.MODE_PRIVATE)
-            .getString("routes", "[]"), routeListType);
+    List<Route> cachedRoutes = DataCache.getRoutes(getActivity());
 
     if (cachedRoutes.isEmpty()) {
       progressBar.setVisibility(View.VISIBLE);
@@ -128,10 +119,7 @@ public class RouteListFragment extends ListFragment {
       }
     });
 
-    getActivity().getSharedPreferences(getActivity().getPackageName(), Context.MODE_PRIVATE)
-        .edit()
-        .putString("routes", gson.toJson(routes))
-        .apply();
+    DataCache.cacheRoutes(getActivity(), routes);
 
     ListView listView = getListView();
     listView.setVisibility(View.VISIBLE);
