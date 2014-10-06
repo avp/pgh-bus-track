@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.avp42.pghbustrack.R;
+import com.avp42.pghbustrack.data.DataCache;
 import com.avp42.pghbustrack.data.PaacApi;
 import com.avp42.pghbustrack.models.prediction.Prediction;
 import com.avp42.pghbustrack.models.stop.Stop;
@@ -31,6 +32,8 @@ public class StopDisplayFragment extends Fragment {
 
   private RelativeLayout progressBar;
 
+  private Stop stop;
+
   public static StopDisplayFragment newInstance(Stop stop) {
     StopDisplayFragment fragment = new StopDisplayFragment();
     Bundle args = new Bundle();
@@ -44,8 +47,7 @@ public class StopDisplayFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_stopdisplay, container, false);
-    Stop stop = (Stop) getArguments().getSerializable("stop");
-    getPredictionInfo(stop);
+    this.stop = (Stop) getArguments().getSerializable("stop");
 
     ActionBar actionBar = getActivity().getActionBar();
     if (actionBar != null) {
@@ -57,6 +59,7 @@ public class StopDisplayFragment extends Fragment {
     int darkColor = Color.parseColor("#0099dd");
     GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
         new int[] {darkColor, Util.darken(darkColor, ROUTE_LIST_GRADIENT_FACTOR)});
+    //noinspection deprecation
     layoutHeading.setBackgroundDrawable(gradientDrawable);
 
     TextView stopNameTextView = (TextView) view.findViewById(R.id.tv_stop_name);
@@ -66,6 +69,12 @@ public class StopDisplayFragment extends Fragment {
     progressBar = (RelativeLayout) view.findViewById(R.id.progress_stopdisplay_loading);
 
     predictionListView = (ListView) view.findViewById(R.id.lv_predictions);
+
+    List<Prediction> predictions = DataCache.getPredictions(getActivity(), this.stop);
+    if (!predictions.isEmpty()) {
+      setPredictions(predictions);
+    }
+    getPredictionInfo(this.stop);
 
     return view;
   }
@@ -91,6 +100,7 @@ public class StopDisplayFragment extends Fragment {
 
   private void setPredictions(List<Prediction> predictions) {
     PredictionArrayAdapter predictionArrayAdapter = new PredictionArrayAdapter(getActivity(), predictions);
+    DataCache.cachePredictions(getActivity(), this.stop, predictions);
     predictionListView.setAdapter(predictionArrayAdapter);
     predictionListView.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
