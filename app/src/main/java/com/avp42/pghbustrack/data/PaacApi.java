@@ -147,7 +147,7 @@ public class PaacApi {
     return Lists.newArrayList();
   }
 
-  protected String executeRequest(String url, Map<String, String> params) throws IOException {
+  private String executeRequest(String url, Map<String, String> params) throws IOException {
     Uri.Builder uri = Uri.parse(BASE_URL + url).buildUpon();
 
     for (Map.Entry<String, String> entry : params.entrySet()) {

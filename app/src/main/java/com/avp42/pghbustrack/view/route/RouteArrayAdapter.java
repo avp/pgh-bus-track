@@ -33,6 +33,7 @@ public class RouteArrayAdapter extends ArrayAdapter<Route> {
     int darkColor = route.getDarkColor();
     GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
         new int[]{darkColor, Util.darken(darkColor, ROUTE_LIST_GRADIENT_FACTOR)});
+    //noinspection deprecation
     routeListLayout.setBackgroundDrawable(gradientDrawable);
 
     TextView routeNameView = (TextView) convertView.findViewById(R.id.tv_route_name);
