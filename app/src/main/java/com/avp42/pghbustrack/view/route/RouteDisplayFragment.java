@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.avp42.pghbustrack.R;
+import com.avp42.pghbustrack.data.DataCache;
 import com.avp42.pghbustrack.data.PaacApi;
 import com.avp42.pghbustrack.models.direction.Direction;
 import com.avp42.pghbustrack.models.route.Route;
@@ -40,6 +41,8 @@ public class RouteDisplayFragment extends Fragment {
   private ListView stopListView;
 
   private RelativeLayout progressBar;
+
+  private Route route;
 
   public static RouteDisplayFragment newInstance(Route route) {
     RouteDisplayFragment fragment = new RouteDisplayFragment();
@@ -81,6 +84,8 @@ public class RouteDisplayFragment extends Fragment {
 
     stopListView = (ListView) view.findViewById(R.id.lv_stops);
 
+    this.route = route;
+
     getStopInfo(route);
     return view;
   }
@@ -88,6 +93,9 @@ public class RouteDisplayFragment extends Fragment {
   private void getStopInfo(final Route route) {
     progressBar.setVisibility(View.VISIBLE);
     stopListView.setVisibility(View.GONE);
+
+    setStops(DataCache.getStops(getActivity(), route));
+    System.out.println(DataCache.getStops(getActivity(), route));
 
     new AsyncTask<Void, Void, Set<Stop>>() {
       @Override
@@ -127,6 +135,8 @@ public class RouteDisplayFragment extends Fragment {
         return Double.compare(lhs.distanceFrom(curLocation), rhs.distanceFrom(curLocation));
       }
     });
+
+    DataCache.cacheStops(getActivity(), this.route, stops);
 
     final RouteDisplayFragment thisFragment = this;
     stopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

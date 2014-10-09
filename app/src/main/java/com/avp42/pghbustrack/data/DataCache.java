@@ -28,6 +28,7 @@ public class DataCache {
 
   private static final String KEY_ROUTES = "routes";
   private static final String KEY_PREDICTIONS = "predictions";
+  private static final String KEY_STOPS = "stops";
 
   private DataCache() {
     throw new AssertionError("RouteCache cannot be instantiated.");
@@ -39,7 +40,8 @@ public class DataCache {
 
   public static List<Route> getRoutes(Context context) {
     Type routeListType = new TypeToken<List<Route>>() { }.getType();
-    return gson.fromJson(getSharedPreferences(context).getString(KEY_ROUTES, "[]"), routeListType);
+    SharedPreferences sharedPreferences = getSharedPreferences(context);
+    return gson.fromJson(sharedPreferences.getString(KEY_ROUTES, "[]"), routeListType);
   }
 
   public static Route getRouteById(Context context, String id) {
@@ -52,6 +54,20 @@ public class DataCache {
     return null;
   }
 
+  private static String getStopCacheKey(Route route) {
+    return String.format("%s-%s", KEY_STOPS, route.getId());
+  }
+
+  public static void cacheStops(Context context, Route route, List<Stop> stops) {
+    getSharedPreferences(context).edit().putString(getStopCacheKey(route), gson.toJson(stops)).apply();
+  }
+
+  public static List<Stop> getStops(Context context, Route route) {
+    Type stopListType = new TypeToken<List<Stop>>() { }.getType();
+    SharedPreferences sharedPreferences = getSharedPreferences(context);
+    return gson.fromJson(sharedPreferences.getString(getStopCacheKey(route), "[]"), stopListType);
+  }
+
   private static String getPredictionCacheKey(Stop stop) {
     return String.format("%s-%s", KEY_PREDICTIONS, stop.getId());
   }
@@ -62,8 +78,8 @@ public class DataCache {
 
   public static List<Prediction> getPredictions(Context context, Stop stop) {
     Type predictionListType = new TypeToken<List<Prediction>>() { }.getType();
-    return gson.fromJson(getSharedPreferences(context).getString(getPredictionCacheKey(stop), "[]"),
-        predictionListType);
+    SharedPreferences sharedPreferences = getSharedPreferences(context);
+    return gson.fromJson(sharedPreferences.getString(getPredictionCacheKey(stop), "[]"), predictionListType);
   }
 
   private static SharedPreferences getSharedPreferences(Context context) {
