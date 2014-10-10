@@ -83,6 +83,7 @@ public class RouteDisplayFragment extends Fragment {
     progressBar = (RelativeLayout) view.findViewById(R.id.progress_routedisplay_loading);
 
     stopListView = (ListView) view.findViewById(R.id.lv_stops);
+    stopListView.setEmptyView(progressBar);
 
     this.route = route;
 

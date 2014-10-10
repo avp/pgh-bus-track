@@ -9,7 +9,6 @@ import com.avp42.pghbustrack.models.prediction.PredictionType;
 import com.avp42.pghbustrack.models.prediction.PredictionTypeDeserializer;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.models.stop.Stop;
-import com.avp42.pghbustrack.models.vehicle.Vehicle;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -43,7 +42,6 @@ public class PaacApi {
       .registerTypeAdapter(PredictionType.class, new PredictionTypeDeserializer())
       .create();
 
-  private static final Type vehicleListType = new TypeToken<List<Vehicle>>() { }.getType();
   private static final Type routeListType = new TypeToken<List<Route>>() { }.getType();
   private static final Type stopListType = new TypeToken<List<Stop>>() { }.getType();
   private static final Type directionListType = new TypeToken<List<Direction>>() { }.getType();
@@ -57,29 +55,6 @@ public class PaacApi {
     return INSTANCE;
   }
 
-  public List<Vehicle> getVehicles(Route route) throws IOException {
-    return getVehicles(Lists.newArrayList(route));
-  }
-
-  public List<Vehicle> getVehicles(List<Route> routes) throws IOException {
-    Log.d(LOG_TAG, "Executing Vehicle Request");
-    Map<String, String> params = Maps.newHashMap();
-    List<String> routeIds = Lists.newArrayList();
-    for (Route r : routes) {
-      routeIds.add(r.getId());
-    }
-    params.put("rt", StringUtils.join(routeIds, ","));
-    String json = executeRequest("/getvehicles", params);
-    JsonArray jsonArray = new JsonParser().parse(json)
-        .getAsJsonObject()
-        .get("bustime-response")
-        .getAsJsonObject()
-        .get("vehicle")
-        .getAsJsonArray();
-    List<Vehicle> vehicles = gson.fromJson(jsonArray, vehicleListType);
-    return vehicles;
-  }
-
   public List<Route> getRoutes() throws IOException {
     Log.d(LOG_TAG, "Executing Routes Request");
     Map<String, String> params = Maps.newHashMap();
@@ -90,8 +65,7 @@ public class PaacApi {
         .getAsJsonObject()
         .get("routes")
         .getAsJsonArray();
-    List<Route> routes = gson.fromJson(jsonArray, routeListType);
-    return routes;
+    return gson.fromJson(jsonArray, routeListType);
   }
 
   public List<Direction> getDirections(Route route) throws IOException {
@@ -105,8 +79,7 @@ public class PaacApi {
         .getAsJsonObject()
         .get("directions")
         .getAsJsonArray();
-    List<Direction> directions = gson.fromJson(jsonArray, directionListType);
-    return directions;
+    return gson.fromJson(jsonArray, directionListType);
   }
 
   public List<Stop> getStops(Route route, Direction direction) throws IOException {
@@ -121,8 +94,7 @@ public class PaacApi {
         .getAsJsonObject()
         .get("stops")
         .getAsJsonArray();
-    List<Stop> stops = gson.fromJson(jsonArray, stopListType);
-    return stops;
+    return gson.fromJson(jsonArray, stopListType);
   }
 
   public List<Prediction> getPredictions(List<Stop> stops) throws IOException {
