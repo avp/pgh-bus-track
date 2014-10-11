@@ -87,17 +87,22 @@ public class RouteDisplayFragment extends Fragment {
 
     this.route = route;
 
+    List<Stop> stops = DataCache.getStops(getActivity(), route);
+
+    progressBar.setVisibility(View.VISIBLE);
+    stopListView.setVisibility(View.GONE);
+
+    if (!stops.isEmpty()) {
+      setStops(stops);
+      progressBar.setVisibility(View.GONE);
+      stopListView.setVisibility(View.VISIBLE);
+    }
+
     getStopInfo(route);
     return view;
   }
 
   private void getStopInfo(final Route route) {
-    progressBar.setVisibility(View.VISIBLE);
-    stopListView.setVisibility(View.GONE);
-
-    setStops(DataCache.getStops(getActivity(), route));
-    System.out.println(DataCache.getStops(getActivity(), route));
-
     new AsyncTask<Void, Void, Set<Stop>>() {
       @Override
       protected Set<Stop> doInBackground(Void... params) {

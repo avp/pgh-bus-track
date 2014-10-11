@@ -145,9 +145,9 @@ public class PaacApi {
         inputStream.close();
         return result;
       }
-      return "";
+      return StringUtils.EMPTY;
     } catch (ClientProtocolException e) {
-      return "";
+      return StringUtils.EMPTY;
     }
   }
 }
