@@ -2,6 +2,7 @@ package com.avp42.pghbustrack.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.avp42.pghbustrack.BuildConfig;
 import com.avp42.pghbustrack.models.DateTimeDeserializer;
 import com.avp42.pghbustrack.models.DateTimeSerializer;
 import com.avp42.pghbustrack.models.prediction.Prediction;
@@ -16,8 +17,6 @@ import com.google.gson.reflect.TypeToken;
 import org.joda.time.DateTime;
 import java.lang.reflect.Type;
 import java.util.List;
-import static android.content.Context.MODE_PRIVATE;
-import static com.avp42.pghbustrack.BuildConfig.PACKAGE_NAME;
 
 public class DataCache {
   private static final Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
@@ -83,6 +82,7 @@ public class DataCache {
   }
 
   private static SharedPreferences getSharedPreferences(Context context) {
-    return context.getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE);
+    String filename = String.format("%s_%s", BuildConfig.PACKAGE_NAME, "datacache");
+    return context.getSharedPreferences(filename, Context.MODE_PRIVATE);
   }
 }
