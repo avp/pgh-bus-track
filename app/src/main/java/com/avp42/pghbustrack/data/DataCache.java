@@ -2,6 +2,7 @@ package com.avp42.pghbustrack.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import com.avp42.pghbustrack.BuildConfig;
 import com.avp42.pghbustrack.models.DateTimeDeserializer;
 import com.avp42.pghbustrack.models.DateTimeSerializer;
@@ -33,8 +34,14 @@ public class DataCache {
     throw new AssertionError("RouteCache cannot be instantiated.");
   }
 
-  public static void cacheRoutes(Context context, List<Route> routes) {
-    getSharedPreferences(context).edit().putString(KEY_ROUTES, gson.toJson(routes)).apply();
+  public static void cacheRoutes(final Context context, final List<Route> routes) {
+    new AsyncTask<Void, Void, Void>() {
+      @Override
+      protected Void doInBackground(Void... params) {
+        getSharedPreferences(context).edit().putString(KEY_ROUTES, gson.toJson(routes)).apply();
+        return null;
+      }
+    }.execute();
   }
 
   public static List<Route> getRoutes(Context context) {
@@ -57,8 +64,14 @@ public class DataCache {
     return String.format("%s-%s", KEY_STOPS, route.getId());
   }
 
-  public static void cacheStops(Context context, Route route, List<Stop> stops) {
-    getSharedPreferences(context).edit().putString(getStopCacheKey(route), gson.toJson(stops)).apply();
+  public static void cacheStops(final Context context, final Route route, final List<Stop> stops) {
+    new AsyncTask<Void, Void, Void>() {
+      @Override
+      protected Void doInBackground(Void... params) {
+        getSharedPreferences(context).edit().putString(getStopCacheKey(route), gson.toJson(stops)).apply();
+        return null;
+      }
+    }.execute();
   }
 
   public static List<Stop> getStops(Context context, Route route) {
@@ -71,8 +84,14 @@ public class DataCache {
     return String.format("%s-%s", KEY_PREDICTIONS, stop.getId());
   }
 
-  public static void cachePredictions(Context context, Stop stop, List<Prediction> predictions) {
-    getSharedPreferences(context).edit().putString(getPredictionCacheKey(stop), gson.toJson(predictions)).apply();
+  public static void cachePredictions(final Context context, final Stop stop, final List<Prediction> predictions) {
+    new AsyncTask<Void, Void, Void>() {
+      @Override
+      protected Void doInBackground(Void... params) {
+        getSharedPreferences(context).edit().putString(getPredictionCacheKey(stop), gson.toJson(predictions)).apply();
+        return null;
+      }
+    }.execute();
   }
 
   public static List<Prediction> getPredictions(Context context, Stop stop) {

@@ -25,9 +25,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class RouteListFragment extends ListFragment {
   private static final String ARG_SECTION_NUMBER = "section_number";
 
