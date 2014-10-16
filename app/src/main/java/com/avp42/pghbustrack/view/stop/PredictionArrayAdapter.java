@@ -12,6 +12,7 @@ import com.avp42.pghbustrack.data.DataCache;
 import com.avp42.pghbustrack.models.prediction.Prediction;
 import com.avp42.pghbustrack.models.route.Route;
 import com.avp42.pghbustrack.util.Util;
+import com.avp42.pghbustrack.view.FontLoader;
 import java.util.List;
 import static com.avp42.pghbustrack.util.Constants.App.ROUTE_LIST_GRADIENT_FACTOR;
 
@@ -34,6 +35,7 @@ public class PredictionArrayAdapter extends ArrayAdapter<Prediction> {
     }
 
     TextView routeIdTextView = (TextView) convertView.findViewById(R.id.tv_route_id);
+    routeIdTextView.setTypeface(FontLoader.getTypeface(getContext(), FontLoader.ARMATA));
     routeIdTextView.setText(prediction.getRouteId());
 
     if (route != null) {
