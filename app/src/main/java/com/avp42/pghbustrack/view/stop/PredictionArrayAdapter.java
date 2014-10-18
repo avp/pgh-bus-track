@@ -47,9 +47,11 @@ public class PredictionArrayAdapter extends ArrayAdapter<Prediction> {
     }
 
     TextView routeDirectionTextView = (TextView) convertView.findViewById(R.id.tv_route_direction);
+    routeDirectionTextView.setTypeface(FontLoader.getTypeface(getContext(), FontLoader.ARMATA));
     routeDirectionTextView.setText(prediction.getRouteDirection());
 
     TextView predictionTimeTextView = (TextView) convertView.findViewById(R.id.tv_prediction_time);
+    predictionTimeTextView.setTypeface(FontLoader.getTypeface(getContext(), FontLoader.ARMATA));
     predictionTimeTextView.setText(String.valueOf(prediction.getMinutesUntilPrediction()));
 
     return convertView;
