@@ -37,6 +37,8 @@ public class StopListFragment extends ListFragment {
 
   private RelativeLayout progressBar;
 
+  private Activity activity;
+
   public static StopListFragment newInstance(int sectionNumber) {
     StopListFragment fragment = new StopListFragment();
     Bundle args = new Bundle();
@@ -59,9 +61,9 @@ public class StopListFragment extends ListFragment {
   @Override
   public void onResume() {
     super.onResume();
-    ActionBar actionBar = getActivity().getActionBar();
+    ActionBar actionBar = this.activity.getActionBar();
     if (actionBar != null) {
-      ((MainActivity) getActivity()).getNavigationDrawerFragment().setDrawerIndicatorEnabled(true);
+      ((MainActivity) this.activity).getNavigationDrawerFragment().setDrawerIndicatorEnabled(true);
     }
 
     progressBar.setVisibility(View.VISIBLE);
@@ -95,6 +97,7 @@ public class StopListFragment extends ListFragment {
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);
+    this.activity = activity;
     ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
   }
 
@@ -102,7 +105,7 @@ public class StopListFragment extends ListFragment {
   public void onListItemClick(ListView listView, View view, int position, long id) {
     super.onListItemClick(listView, view, position, id);
     Stop stop = (Stop) listView.getAdapter().getItem(position);
-    FragmentManager fragmentManager = getActivity().getFragmentManager();
+    FragmentManager fragmentManager = this.activity.getFragmentManager();
     fragmentManager.beginTransaction()
         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
         .remove(this)
@@ -117,7 +120,7 @@ public class StopListFragment extends ListFragment {
     Collections.sort(stops, new Comparator<Stop>() {
       @Override
       public int compare(Stop lhs, Stop rhs) {
-        Location curLocation = ((MainActivity) getActivity()).getLocation();
+        Location curLocation = ((MainActivity) activity).getLocation();
         return Double.compare(lhs.distanceFrom(curLocation), rhs.distanceFrom(curLocation));
       }
     });
@@ -127,7 +130,7 @@ public class StopListFragment extends ListFragment {
     listView.getEmptyView().setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
 
-    StopArrayAdapter arrayAdapter = new StopArrayAdapter(getActivity(), stops);
+    StopArrayAdapter arrayAdapter = new StopArrayAdapter(this.activity, stops);
     listView.setAdapter(arrayAdapter);
   }
 }

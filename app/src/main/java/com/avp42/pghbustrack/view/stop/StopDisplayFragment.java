@@ -1,6 +1,7 @@
 package com.avp42.pghbustrack.view.stop;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -34,6 +35,8 @@ public class StopDisplayFragment extends Fragment {
 
   private Stop stop;
 
+  private Activity activity;
+
   public static StopDisplayFragment newInstance(Stop stop) {
     StopDisplayFragment fragment = new StopDisplayFragment();
     Bundle args = new Bundle();
@@ -45,11 +48,17 @@ public class StopDisplayFragment extends Fragment {
   public StopDisplayFragment() {}
 
   @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    this.activity = activity;
+  }
+
+  @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_stopdisplay, container, false);
     this.stop = (Stop) getArguments().getSerializable("stop");
 
-    ActionBar actionBar = getActivity().getActionBar();
+    ActionBar actionBar = this.activity.getActionBar();
     if (actionBar != null) {
       ((MainActivity) getActivity()).getNavigationDrawerFragment().setDrawerIndicatorEnabled(false);
       setHasOptionsMenu(true);
@@ -64,13 +73,13 @@ public class StopDisplayFragment extends Fragment {
 
     TextView stopNameTextView = (TextView) view.findViewById(R.id.tv_stop_name);
     stopNameTextView.setText(stop.getName());
-    stopNameTextView.setTypeface(FontLoader.getTypeface(getActivity(), FontLoader.ARMATA));
+    stopNameTextView.setTypeface(FontLoader.getTypeface(this.activity, FontLoader.ARMATA));
 
     progressBar = (RelativeLayout) view.findViewById(R.id.progress_stopdisplay_loading);
 
     predictionListView = (ListView) view.findViewById(R.id.lv_predictions);
 
-    List<Prediction> predictions = DataCache.getPredictions(getActivity(), this.stop);
+    List<Prediction> predictions = DataCache.getPredictions(this.activity, this.stop);
     if (!predictions.isEmpty()) {
       setPredictions(predictions);
     }
@@ -99,8 +108,8 @@ public class StopDisplayFragment extends Fragment {
   }
 
   private void setPredictions(List<Prediction> predictions) {
-    PredictionArrayAdapter predictionArrayAdapter = new PredictionArrayAdapter(getActivity(), predictions);
-    DataCache.cachePredictions(getActivity(), this.stop, predictions);
+    PredictionArrayAdapter predictionArrayAdapter = new PredictionArrayAdapter(this.activity, predictions);
+    DataCache.cachePredictions(this.activity, this.stop, predictions);
     predictionListView.setAdapter(predictionArrayAdapter);
     predictionListView.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
@@ -110,7 +119,7 @@ public class StopDisplayFragment extends Fragment {
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case android.R.id.home:
-        getActivity().onBackPressed();
+        this.activity.onBackPressed();
         return true;
     }
     return true;
