@@ -73,10 +73,11 @@ public class StopListFragment extends ListFragment {
       protected Set<Stop> doInBackground(Void... params) {
         try {
           PaacApi api = PaacApi.getInstance();
-          Route route = api.getRoutes().get(0);
           Set<Stop> stops = Sets.newHashSet();
-          for (Direction direction : api.getDirections(route)) {
-            stops.addAll(api.getStops(route, direction));
+          for (Route route : api.getRoutes()) {
+            for (Direction direction : api.getDirections(route)) {
+              stops.addAll(api.getStops(route, direction));
+            }
           }
           return stops;
         } catch (IOException e) {

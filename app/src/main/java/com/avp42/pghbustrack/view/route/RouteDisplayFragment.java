@@ -1,6 +1,7 @@
 package com.avp42.pghbustrack.view.route;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.graphics.drawable.GradientDrawable;
@@ -44,6 +45,8 @@ public class RouteDisplayFragment extends Fragment {
 
   private Route route;
 
+  private Activity activity;
+
   public static RouteDisplayFragment newInstance(Route route) {
     RouteDisplayFragment fragment = new RouteDisplayFragment();
     Bundle args = new Bundle();
@@ -55,13 +58,19 @@ public class RouteDisplayFragment extends Fragment {
   public RouteDisplayFragment() {}
 
   @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    this.activity = activity;
+  }
+
+  @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_routedisplay, container, false);
     Route route = (Route) getArguments().getSerializable("route");
 
-    ActionBar actionBar = getActivity().getActionBar();
+    ActionBar actionBar = this.activity.getActionBar();
     if (actionBar != null) {
-      ((MainActivity) getActivity()).getNavigationDrawerFragment().setDrawerIndicatorEnabled(false);
+      ((MainActivity) this.activity).getNavigationDrawerFragment().setDrawerIndicatorEnabled(false);
       setHasOptionsMenu(true);
     }
 
@@ -74,11 +83,11 @@ public class RouteDisplayFragment extends Fragment {
 
     TextView routeIdTextView = (TextView) view.findViewById(R.id.tv_route_id);
     routeIdTextView.setText(route.getId());
-    routeIdTextView.setTypeface(FontLoader.getTypeface(getActivity(), FontLoader.ARMATA));
+    routeIdTextView.setTypeface(FontLoader.getTypeface(this.activity, FontLoader.ARMATA));
 
     TextView routeNameTextView = (TextView) view.findViewById(R.id.tv_route_name);
     routeNameTextView.setText(route.getName());
-    routeNameTextView.setTypeface(FontLoader.getTypeface(getActivity(), FontLoader.ARMATA));
+    routeNameTextView.setTypeface(FontLoader.getTypeface(this.activity, FontLoader.ARMATA));
 
     progressBar = (RelativeLayout) view.findViewById(R.id.progress_routedisplay_loading);
 
@@ -87,7 +96,7 @@ public class RouteDisplayFragment extends Fragment {
 
     this.route = route;
 
-    List<Stop> stops = DataCache.getStops(getActivity(), route);
+    List<Stop> stops = DataCache.getStops(this.activity, route);
 
     progressBar.setVisibility(View.VISIBLE);
     stopListView.setVisibility(View.GONE);
@@ -129,7 +138,7 @@ public class RouteDisplayFragment extends Fragment {
   private void setStops(final Collection<Stop> stopSet) {
     List<Stop> stops = Lists.newArrayList(stopSet);
 
-    StopArrayAdapter stopArrayAdapter = new StopArrayAdapter(getActivity(), stops);
+    StopArrayAdapter stopArrayAdapter = new StopArrayAdapter(this.activity, stops);
     stopListView.setAdapter(stopArrayAdapter);
     stopListView.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
@@ -137,19 +146,19 @@ public class RouteDisplayFragment extends Fragment {
     Collections.sort(stops, new Comparator<Stop>() {
       @Override
       public int compare(Stop lhs, Stop rhs) {
-        Location curLocation = ((MainActivity) getActivity()).getLocation();
+        Location curLocation = ((MainActivity) activity).getLocation();
         return Double.compare(lhs.distanceFrom(curLocation), rhs.distanceFrom(curLocation));
       }
     });
 
-    DataCache.cacheStops(getActivity(), this.route, stops);
+    DataCache.cacheStops(this.activity, this.route, stops);
 
     final RouteDisplayFragment thisFragment = this;
     stopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Stop stop = (Stop) stopListView.getAdapter().getItem(position);
-        FragmentManager fragmentManager = getActivity().getFragmentManager();
+        FragmentManager fragmentManager = activity.getFragmentManager();
         fragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
             .remove(thisFragment)
@@ -164,7 +173,7 @@ public class RouteDisplayFragment extends Fragment {
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case android.R.id.home:
-        getActivity().onBackPressed();
+        this.activity.onBackPressed();
         return true;
     }
     return true;
